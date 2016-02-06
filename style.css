@@ -1,0 +1,179 @@
+body
+{
+    background-color: #81848F;
+    margin: 0 auto;
+}
+
+#container
+{
+    border: 2px solid yellow;
+    margin: 10px;
+    padding-left: 2%;
+    height: 400px;
+    width: 500px;
+}
+
+#interface
+{
+    margin-left: 5%;
+    margin-top: 5%;
+}
+
+#buttonL
+{
+    float: left;
+    margin-right: 5px;
+    margin-top: 20px;
+    text-align: right;
+}
+
+.buttonLi
+{
+    color: #00C217;
+}
+
+#withdrawButton
+{
+    margin-top: 37px;
+}
+
+#screen
+{
+    float: left;
+    border: 2px solid black;
+    height: 150px;
+    width: 275px;
+    background-color: white;
+}
+
+.main-menus
+{
+    display: none;
+    border: 1px solid red;
+}
+
+.main-menus, .sub-menus *
+{
+    margin: 0;
+    /*padding: 0;*/
+}
+
+#start
+{
+    display: block;
+}
+
+#buttonR
+{
+    float: left;
+    margin-left: 5px;
+    margin-top: 20px;
+}
+
+.buttonRi
+{
+    color: red;
+}
+
+#exitButton
+{
+    margin-top: 37px;
+}
+
+#keyboard
+{
+    float: left;
+    border: 2px solid red;
+    width: 106px;
+    height: 141px;
+}
+
+.numKey
+{
+    color: black;
+    float:left;
+    margin: 1px;
+}
+
+#key0
+{
+    float: left;
+    width: 64px;
+}
+
+#keyDelete
+{
+    float: left;
+    color: red;
+    width: 32px;
+    margin-top: 1px;
+    padding: 1px 0;
+}
+
+#keyOk
+{
+    color: green;
+    float: left;
+    margin-top: 10px;
+    width: 40px;
+}
+
+#keyCancel
+{
+    float: left;
+    color: red;
+    margin-top: 10px;
+    margin-left: 5px;
+
+}
+
+#slots
+{
+    float: left;
+    margin-left: 200px;
+}
+
+#moneySlot
+{
+    margin-top: 10px;
+    background-color: white;
+    width: 100px;
+}
+
+.menu
+{
+    border: 1px solid black;
+    width: 60px;
+    position: relative;
+    z-index: 0;
+    /*margin-right: -100px;*/
+    /* display: none;*/
+}
+
+#depositHint
+{
+    float: left;
+    margin-top: 20px;
+    text-align: left;
+}
+
+#statusHint
+{
+    float: right;
+    margin-top: 20px;
+    text-align: right;
+}
+
+#withdrawHint
+{
+    float: left;
+    margin-top: 40px;
+    text-align: left;
+}
+
+#exitHint
+{
+    float: right;
+    margin-top: 40px;
+    text-align: right;
+}

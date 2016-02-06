@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Wirtualny Bankomat</title>
+    <meta charset="UTF-8">
+    <meta lang="pl">
+    <link type="text/css" rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="container"> <!-- Main Container -->
+        <div id="interface"> <!-- interface -->
+
+            <div id="buttonL"> <!-- left buttons -->
+                <div><button type="button" class="buttonLi" id="depositButton">Wpłata</button></div>
+                <div><button type="button" class="buttonLi" id="withdrawButton">Wypłata</button></div>
+            </div>   <!-- END of left buttons -->
+
+            <div id="screen"> <!-- SCREEN -->
+                <div id="start" class="main-menus"> <!-- Start screen -->
+                    <p>Włóż kartę do czytnika...</p>
+
+                    <div id="pin" class="sub-menus">
+                        <p id="typePin">Wprowadź kod PIN: </p>
+                        <p id="wrongPin">Błędny kod PIN! Wpisz PIN ponownie. <br> Pozostało prób: </p>
+                        <p id="blocked">Przekroczono limit prób - blokada!</p>
+                    </div>
+                </div> <!-- END of Start screen -->
+
+                <div id="main-menu" class="main-menus"> <!-- Main Menu screen -->
+                    <p class="top">Witamy w banku!</p>
+
+                    <div id="main-options" class="sub-menus">
+                        <p class="hints">Wpłać</p>
+                        <p class="hints">Sprawdź stan konta</p>
+                        <p class="hints">Wypłac</p>
+                        <p class="hints">Wyjście</p>
+                    </div>
+
+                    <div id="deposit-menu" class="sub-menus">
+                        <p class="top">Kwota do wpłaty: </p>
+
+                        <p class="hints">Wpłacono: </p>
+                    </div>
+
+                    <div id="status-menu" class="sub-menus">
+                        <p class="top">Twój aktualny stan konta: </p>
+
+                        <p class="hints">???</p>
+                    </div>
+
+                    <div id="withdraw-menu" class="sub-menus">
+                        <p class="top">Kwota do wypłaty: </p>
+
+                        <p class="hints">Wypłacono: </p>
+                    </div>
+
+                    <div id="settings-menu" class="sub-menus">
+                        <p class="top">Ustawienia</p>
+
+                        <p class="hints">???</p>
+                    </div>
+                </div> <!-- END of Main Menu screen -->
+            </div> <!-- END of SCREEN -->
+
+            <div id="buttonR"> <!-- right buttons -->
+                <div><button type="button" class="buttonRi" id="accountCheckButton">Stan konta</button></div>
+                <div><button type="button" class="buttonRi" id="exitButton">Wyjdź</button></div>
+            </div>  <!-- END of  right buttons -->
+
+        </div> <!-- END of interface -->
+
+        <div style="clear: both;"></div>
+
+        <div id="keyboard"> <!-- keyboard -->
+            <div><button type="button" class="numKey" id="key7">7</button></div>
+            <div><button type="button" class="numKey" id="key8">8</button></div>
+            <div><button type="button" class="numKey" id="key9">9</button></div>
+
+            <div style="clear: both;"></div>
+
+            <div><button type="button" class="numKey" id="key4">4</button></div>
+            <div><button type="button" class="numKey" id="key5">5</button></div>
+            <div><button type="button" class="numKey" id="key6">6</button></div>
+
+            <div style="clear: both;"></div>
+
+            <div><button type="button" class="numKey" id="key1">1</button></div>
+            <div><button type="button" class="numKey" id="key2">2</button></div>
+            <div><button type="button" class="numKey" id="key3">3</button></div>
+
+            <div style="clear: both;"></div>
+
+            <div><button type="button" class="numKey" id="key0">0</button></div>
+            <div><button type="button" id="keyDelete">Del</button></div>
+
+            <div style="clear: both;"></div>
+
+            <div><button type="submit" id="keyOk">OK</button></div>
+            <div><button type="submit" id="keyCancel">Anuluij</button></div>
+        </div> <!-- END of keyboard -->
+
+        <div id="slots"> <!-- card slot -->
+            <button type="button" id="cardSlot">Karta</button>
+            <p id="moneySlot">:</p>
+        </div> <!-- END of card slot -->
+
+        <div style="clear: both;"></div>
+
+    </div> <!-- END OF Main Container -->
+
+<script type="text/javascript" src="code.js"></script>
+</body>
+</html>
