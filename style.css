@@ -46,22 +46,41 @@ body
     background-color: white;
 }
 
+#screen input
+{
+    width: 50px;
+    display: inline-block;
+    border: none;
+    border-bottom: 2px dotted orange;
+    padding-bottom: 0;
+}
+
 .main-menus
 {
-    display: none;
     border: 1px solid red;
+    padding-bottom: 2px;
 }
 
-.main-menus, .sub-menus *
+.main-menus * /*, .sub-menus **/
 {
     margin: 0;
-    /*padding: 0;*/
+    padding: 2px;
 }
 
-#start
+/*#pin, #main-menu
+{
+    display: none;
+}*/
+
+.main-menus, .top, .sub-menus, .hints
+{
+    display: none;
+}
+
+/*#insertCard
 {
     display: block;
-}
+}*/
 
 #buttonR
 {
@@ -131,6 +150,22 @@ body
 {
     float: left;
     margin-left: 200px;
+}
+
+#cardSlot
+{
+    width: 75px;
+    height: 27px;
+    margin-top: 1px;
+    padding: 2px;
+    border: 1px solid black;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#cardSlot:hover
+{
+    cursor: pointer;
 }
 
 #moneySlot

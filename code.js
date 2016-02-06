@@ -1,5 +1,5 @@
-(function ()
-{
+//(function ()
+//{
     // Function flags
     var exitStatus = 0, //0 - when in menu; 1 - when in submenu
         menuStatus = 0, //0 - when not logged in; 1 - when in menu, 2-when in submenu
@@ -16,7 +16,7 @@
         interfaceHandler,
         keyboardHandler,
         slotsHandler,
-        cardInserted,
+        checkPin,
         submitKey,
         accountMenu,
         checkAccountStatus,
@@ -26,27 +26,27 @@
         digitListener,
         exit;
 
-
     //Changes menus screen depend of which one is chosen
     screenManipulation = function(scrName)
     {
         var screenName = scrName;
-
-
-
         console.log('Current screenName: ', screenName);
 
         switch (screenName)
         {
-            case 'Wpłata': depositMoney();
+            case 'depositButton': depositMoney();
                             break;
-            case 'Wypłata': withdrawMoney();
+            case 'withdrawButton': withdrawMoney();
                             break;
-            case 'Stan konta': checkAccountStatus();
+            case 'checkAccountButton': checkAccountStatus();
                             break;
-            case 'Wyjdź': exit();
+            case 'cardInserted': document.getElementById('pin').style.display = 'block';
+                                document.getElementById('pin').getElementsByClassName('hints')[0].style.display = 'block';
+                                checkPin();
                             break;
-            default: console.log('Default.... what to do?');
+            case 'exitButton': exit();
+                            break;
+            default: console.log('Default switch... what to do?');
                             break;
         }
 
@@ -55,9 +55,11 @@
     //Invokes every time some button in interface is pressed
     interfaceHandler = function(ev)
     {
-        console.log('\n Interface handler ev.target: ', ev.target.innerHTML);
-
-        screenManipulation(ev.target.innerHTML);
+        if (ev.target.tagName.toUpperCase() != 'INPUT')
+        {
+            console.log('\n Interface handler ev.target: ', ev.target.id, '|| ', ev.target.tagName);
+            screenManipulation(ev.target.id);
+        }
     };
 
     //Invokes every time some keyboard button is pressed
@@ -66,24 +68,35 @@
         console.log('Keyboard handler ev.target: ', ev.target.innerHTML);
     };
 
-    slotsHandler = function(ev)
+    slotsHandler = function(ev, intervalId, iC, s, cS, listen)
     {
-        if (ev.target.id === 'cardSlot')
+        if (ev.target.id === 'cardSlot' && listen === true)
         {
             console.log('Slots handler ev.target: ', ev.target.innerHTML);
+            console.log('listener? ',listen);
+            console.log('intervalId: ', intervalId);
+            clearInterval(intervalId);
+
+            iC.style.display = 'none';
+            cS.style.background = 'blue';
+            cS.style.color = 'white';
+
+            screenManipulation('cardInserted');
         }
     };
 
     //After card button is pressed
-    cardInserted = function()
+    checkPin = function()
     {
+        console.log('[F]checkPin?');
+
         //onScreen.innerHTML = "Wpisz kod PIN: ";
-        var onScreen = document.getElementById('screen');
+        /*var onScreen = document.getElementById('screen');
         divLength = onScreen.innerHTML.length;
         digitLength = 0;
         maxDigitLength = 4;
         digitStatus = 1;
-        allowDigitType = true;
+        allowDigitType = true;*/
     };
 
 
@@ -268,27 +281,60 @@
 
 
     // Site start
-    (function start()
+    function start()
     {
-        var startScr = document.getElementById(''),
-            subMenus = document.getElementsByClassName('sub-menus');
+        /*var startScr = document.getElementById(''),
+            mainMenus = document.getElementsByClassName('main-menus'),
+            subMenus = document.getElementsByClassName('sub-menus');*/
+        var iC = document.getElementById('insertCard'),
+            s = document.getElementById('start'),
+            cS = document.getElementById('cardSlot');
 
-        for (var i = 0; i < subMenus.length; i++)
+        iC.style.display = 'block';
+
+        s.style.display = 'block';
+
+        cS.style.color = 'green';
+        cS.style.background = 'white';
+
+        var intervalId = 0;
+        intervalId = setInterval(function()
         {
-            console.log('subMenus content: ', subMenus[i]);
-        }
+            if (cS.style.color === 'green')
+            {
+                cS.style.color = 'white';
+                cS.style.background = 'green';
+            }
+
+            else
+            {
+                cS.style.color = 'green';
+                cS.style.background = 'white';
+            }
+
+        }, 1000);
 
         //// onScreen = document.getElementById('screen');
         ////onScreen.innerHTML = "Włoż kartę do czytnika &nbsp; (kliknij /card/)";
         // console.log("inner length " + onScreen.innerHTML.length);
-        pinCount = 0;
+        ////pinCount = 0;
 
-        (function eventsHandling(d)
+        var listening = true;
+        function eventsHandling(d)
         {
+
             d.getElementById('interface').addEventListener('click', interfaceHandler, false);
             d.getElementById('keyboard').addEventListener('click', keyboardHandler, false);
-            d.getElementById('slots').addEventListener('click', slotsHandler, false);
-        }(document));
+            d.getElementById('slots').addEventListener('click', function(ev)
+            {
+                slotsHandler(ev, intervalId, iC, s, cS, listening);
+                listening = false;
+            }, false);
 
-    }());
-}());
+
+        }
+        eventsHandling(document);
+
+    }
+    start();
+//}());

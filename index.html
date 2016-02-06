@@ -18,12 +18,12 @@
 
             <div id="screen"> <!-- SCREEN -->
                 <div id="start" class="main-menus"> <!-- Start screen -->
-                    <p>Włóż kartę do czytnika...</p>
+                    <p id="insertCard" class="top">Włóż kartę do czytnika...</p>
 
                     <div id="pin" class="sub-menus">
-                        <p id="typePin">Wprowadź kod PIN: </p>
-                        <p id="wrongPin">Błędny kod PIN! Wpisz PIN ponownie. <br> Pozostało prób: </p>
-                        <p id="blocked">Przekroczono limit prób - blokada!</p>
+                        <p id="typePin" class="hints">Wprowadź kod PIN: <input type="text"></p>
+                        <p id="wrongPin" class="hints">Błędny kod PIN! Wpisz PIN ponownie. <br> Pozostało prób: </p>
+                        <p id="blocked" class="hints">Przekroczono limit prób - blokada!</p>
                     </div>
                 </div> <!-- END of Start screen -->
 
@@ -31,10 +31,10 @@
                     <p class="top">Witamy w banku!</p>
 
                     <div id="main-options" class="sub-menus">
-                        <p class="hints">Wpłać</p>
-                        <p class="hints">Sprawdź stan konta</p>
-                        <p class="hints">Wypłac</p>
-                        <p class="hints">Wyjście</p>
+                        <p id="payIn" class="hints">Wpłać</p>
+                        <p id="accountStatus" class="hints">Sprawdź stan konta</p>
+                        <p id="payOut" class="hints">Wypłac</p>
+                        <p id="quit" class="hints">Wyjście</p>
                     </div>
 
                     <div id="deposit-menu" class="sub-menus">
@@ -64,7 +64,7 @@
             </div> <!-- END of SCREEN -->
 
             <div id="buttonR"> <!-- right buttons -->
-                <div><button type="button" class="buttonRi" id="accountCheckButton">Stan konta</button></div>
+                <div><button type="button" class="buttonRi" id="checkAccountButton">Stan konta</button></div>
                 <div><button type="button" class="buttonRi" id="exitButton">Wyjdź</button></div>
             </div>  <!-- END of  right buttons -->
 
