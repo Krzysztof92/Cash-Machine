@@ -1,7 +1,7 @@
 //(function ()
 //{
     // Function flags
-    var exitStatus = 0, //0 - when in menu; 1 - when in submenu
+    /*var exitStatus = 0, //0 - when in menu; 1 - when in submenu
         menuStatus = 0, //0 - when not logged in; 1 - when in menu, 2-when in submenu
         digitStatus = 0, //0 - when card not inserted; 1 - when typing PIN, 2-when typing amount of cash to deposit/withdraw
         allowDigitType = false, //false - turn off keyboard; true - turn on keyboard
@@ -9,7 +9,7 @@
         divLength = 0,
         maxDigitLength = 0,
         accountStatus = 1000,
-        money = "";
+        money = "";*/
 
     // Variables for function expressions
     var screenManipulation,
@@ -42,7 +42,7 @@
                             break;
             case 'cardInserted': document.getElementById('pin').style.display = 'block';
                                 document.getElementById('pin').getElementsByClassName('hints')[0].style.display = 'block';
-                                checkPin();
+                                //checkPin();
                             break;
             case 'exitButton': exit();
                             break;
@@ -55,7 +55,7 @@
     //Invokes every time some button in interface is pressed
     interfaceHandler = function(ev)
     {
-        if (ev.target.tagName.toUpperCase() != 'INPUT')
+        if (ev.target.tagName.toUpperCase() !== 'INPUT' && ev.target.tagName.toUpperCase() !== 'P' && ev.target.tagName.toUpperCase() !== 'DIV')
         {
             console.log('\n Interface handler ev.target: ', ev.target.id, '|| ', ev.target.tagName);
             screenManipulation(ev.target.id);
@@ -63,17 +63,33 @@
     };
 
     //Invokes every time some keyboard button is pressed
-    keyboardHandler = function(ev)
+/*    keyboardHandler = function(ev, digitS, minimumPinLen, pinInput)
     {
-        console.log('Keyboard handler ev.target: ', ev.target.innerHTML);
-    };
+        //console.log('Keyboard handler ev.target: ', ev.target.innerHTML);
+        ////console.log('[F]keyboardHandler?');
+        ////////////
 
-    slotsHandler = function(ev, intervalId, iC, s, cS, listen)
+        console.log('pinInput val: ', pinInput.value, '|| pinInputLen: ', pinInput.value.length);
+
+
+
+        //if (ev.target.tagName.toUpperCase() !== 'DIV' && digitS === 1 && Number(ev.target.innerHTML) >= 0)
+        {
+
+
+            //pinInputVal += ev.target.innerHTML;
+            //console.log('pinInput: ', pinInputVal);
+            //console.log('minimumPinLen: ', minimumPinLen,'|| pinLen: ', pinLen);
+        }
+    };*/
+
+    //Invokes when card is inserted (at the beginning)
+    slotsHandler = function(ev, intervalId, iC, s, cS, slotListen)
     {
-        if (ev.target.id === 'cardSlot' && listen === true)
+        if (ev.target.id === 'cardSlot' && slotListen === true)
         {
             console.log('Slots handler ev.target: ', ev.target.innerHTML);
-            console.log('listener? ',listen);
+            console.log('listener? ',slotListen);
             console.log('intervalId: ', intervalId);
             clearInterval(intervalId);
 
@@ -86,12 +102,15 @@
     };
 
     //After card button is pressed
-    checkPin = function()
+    checkPin = function(ev, pinInput, correctPin)
     {
         console.log('[F]checkPin?');
 
+        console.log('pinInput val: ', pinInput.value, '/ pinInputLen: ', pinInput.value.length, 'correctPin: ', correctPin);
+
         //onScreen.innerHTML = "Wpisz kod PIN: ";
-        /*var onScreen = document.getElementById('screen');
+
+    /*  var onScreen = document.getElementById('screen');
         divLength = onScreen.innerHTML.length;
         digitLength = 0;
         maxDigitLength = 4;
@@ -319,16 +338,66 @@
         // console.log("inner length " + onScreen.innerHTML.length);
         ////pinCount = 0;
 
-        var listening = true;
+        var correctPin = Number(1234);
+
         function eventsHandling(d)
         {
+            var slotListening = true,
+                digitStatus = 0, //0 - when started, 1 - when typing PIN
+                minimumPinLen = 4,
+                pinInput = d.getElementById('typePin').childNodes[1],
+                canCheckPin = false;
+
 
             d.getElementById('interface').addEventListener('click', interfaceHandler, false);
-            d.getElementById('keyboard').addEventListener('click', keyboardHandler, false);
+            d.getElementById('keyboard').addEventListener('click', function(ev)
+            {
+                //console.log('EV!: ', ev.target.innerHTML);
+
+                if (ev.target.tagName.toUpperCase() !== 'DIV' && digitStatus === 1 && Number(ev.target.innerHTML) >= 0)
+                {
+                    pinInput.value += ev.target.innerHTML;
+                    console.log('pinInput: ', pinInput.value, '|| pressed: ', ev.target.innerHTML);
+
+                    if (pinInput.value.length >= minimumPinLen)
+                    {
+                        //canCheckPin = keyboardHandler(ev, digitStatus, minimumPinLen, pinInput);
+                        //canCheckPin = checkPin(ev, minimumPinLen, pinInput);
+
+                        canCheckPin = true;
+                    }
+
+                }
+
+                if (ev.target.innerHTML === 'Del' && digitStatus === 1)
+                {
+                    //console.log('del');
+                    if (pinInput.value.length)
+                    {
+                       pinInput.value = pinInput.value.slice(0, -1);
+                       console.log('deleted...');
+
+                        if (pinInput.value.length < minimumPinLen)
+                        {
+                            canCheckPin = false;
+                        }
+                    }
+                }
+
+                if (canCheckPin === true)
+                {
+                    if (ev.target.innerHTML === 'OK')
+                    {
+                        //console.log('If >= 4 i can check: ', pinInput.value.length);
+                        checkPin(ev, pinInput, correctPin);
+                    }
+                }
+            }, false);
             d.getElementById('slots').addEventListener('click', function(ev)
             {
-                slotsHandler(ev, intervalId, iC, s, cS, listening);
-                listening = false;
+                slotsHandler(ev, intervalId, iC, s, cS, slotListening);
+                slotListening = false;
+                digitStatus = 1;
             }, false);
 
 

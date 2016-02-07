@@ -2,6 +2,7 @@ body
 {
     background-color: #81848F;
     margin: 0 auto;
+    font-weight: bold;
 }
 
 #container
@@ -48,8 +49,14 @@ body
 
 #screen input
 {
-    width: 50px;
+    width: 65px;
+    text-align: center;
+
+    font-weight: bold;
+    font-size: 12px;
+
     display: inline-block;
+    background: white;
     border: none;
     border-bottom: 2px dotted orange;
     padding-bottom: 0;
@@ -123,7 +130,14 @@ body
 #keyDelete
 {
     float: left;
-    color: red;
+
+    color: yellow;
+    text-shadow:
+            -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            1px 1px 0 #000;
+
     width: 32px;
     margin-top: 1px;
     padding: 1px 0;
