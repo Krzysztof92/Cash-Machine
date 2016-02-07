@@ -24,6 +24,7 @@
         withdrawMoney,
         actionListener,
         digitListener,
+        blockCard,
         exit;
 
     //Changes menus screen depend of which one is chosen
@@ -43,6 +44,13 @@
             case 'cardInserted': document.getElementById('pin').style.display = 'block';
                                 document.getElementById('pin').getElementsByClassName('hints')[0].style.display = 'block';
                                 //checkPin();
+                            break;
+            case 'wrongPin': document.getElementById('pin').getElementsByClassName('hints')[0].style.display = 'none';
+                            document.getElementById('pin').getElementsByClassName('hints')[1].style.display = 'block';
+                            break;
+            case 'blocked': document.getElementById('pin').getElementsByClassName('hints')[1].style.display = 'none';
+                            document.getElementById('pin').getElementsByClassName('hints')[2].style.display = 'block';
+                            blockCard();
                             break;
             case 'exitButton': exit();
                             break;
@@ -102,11 +110,47 @@
     };
 
     //After card button is pressed
-    checkPin = function(ev, pinInput, correctPin)
+    checkPin = function(ev, pinInput, correctPin, pinCount, maxPinCount, failCount)
     {
-        console.log('[F]checkPin?');
+        ////console.log('[F]checkPin?');
+        ////console.log('pinInput val: ', pinInput.value, '/ pinInputLen: ', pinInput.value.length, 'correctPin: ', correctPin);
 
-        console.log('pinInput val: ', pinInput.value, '/ pinInputLen: ', pinInput.value.length, 'correctPin: ', correctPin);
+        //pinCount++;
+
+        if (Number(pinInput.value) === correctPin)
+        {
+            console.log('PIN is correct!');
+            return 1;
+        }
+
+        else if (pinCount < 3)
+        {
+            console.log('PIN is wrong! counter', pinCount);
+            screenManipulation('wrongPin');
+
+            document.getElementsByClassName('typeDigits')[1].value = '';
+
+            if (failCount.textContent.length >= 18)
+            {
+                console.log('???');
+                failCount.textContent = failCount.textContent.slice(0, -1);
+            }
+
+            failCount.textContent += maxPinCount - pinCount;
+            console.log('failCount: ', failCount);
+
+            return 2;
+        }
+
+        else
+        {
+            console.log('Your card is blocked!');
+
+            screenManipulation('blocked');
+
+            return 2;
+        }
+
 
         //onScreen.innerHTML = "Wpisz kod PIN: ";
 
@@ -118,7 +162,34 @@
         allowDigitType = true;*/
     };
 
+    blockCard = function()
+    {
+        var blink = 0;
 
+        setInterval(function()
+        {
+            if (document.getElementById('cardSlot').style.background !== 'red')
+            {
+                document.getElementById('cardSlot').style.background = 'red';
+                document.getElementById('cardSlot').style.color = 'white';
+            }
+            else
+            {
+                document.getElementById('cardSlot').style.background = 'white';
+                document.getElementById('cardSlot').style.color = 'red';
+            }
+
+            blink++;
+        }, 500);
+
+        setTimeout(function()
+        {
+            location.reload(true);
+        }, 4000);
+
+    };
+
+//////////////////////////////////////////
     //After submit key is pressed
     submitKey = function()
     {
@@ -168,7 +239,7 @@
             //  console.log("accountStatus " + accountStatus);
         }
     };
-
+/////////////////////////////////////////
 
     // Main menu after PIN is accepted
     accountMenu = function()
@@ -345,19 +416,24 @@
             var slotListening = true,
                 digitStatus = 0, //0 - when started, 1 - when typing PIN
                 minimumPinLen = 4,
-                pinInput = d.getElementById('typePin').childNodes[1],
-                canCheckPin = false;
-
+                canCheckPin = false,
+                pinCount = 0,
+                maxPinCount = 3,
+                failCount = document.getElementById('wrongPin').childNodes[5];
 
             d.getElementById('interface').addEventListener('click', interfaceHandler, false);
             d.getElementById('keyboard').addEventListener('click', function(ev)
             {
-                //console.log('EV!: ', ev.target.innerHTML);
+                ////console.log('EV!: ', ev.target.innerHTML);
+                var pinInput = d.getElementsByClassName('typeDigits')[digitStatus - 1];
 
-                if (ev.target.tagName.toUpperCase() !== 'DIV' && digitStatus === 1 && Number(ev.target.innerHTML) >= 0)
+                //console.log('?pinCount: ', pinCount);
+
+                if (ev.target.tagName.toUpperCase() !== 'DIV' && digitStatus > 0 && Number(ev.target.innerHTML) >= 0)
                 {
+
                     pinInput.value += ev.target.innerHTML;
-                    console.log('pinInput: ', pinInput.value, '|| pressed: ', ev.target.innerHTML);
+                    //console.log('pinInput: ', pinInput.value, '|| pressed: ', ev.target.innerHTML);
 
                     if (pinInput.value.length >= minimumPinLen)
                     {
@@ -369,13 +445,14 @@
 
                 }
 
-                if (ev.target.innerHTML === 'Del' && digitStatus === 1)
+                else if (ev.target.innerHTML === 'Del' && digitStatus > 0)
                 {
                     //console.log('del');
                     if (pinInput.value.length)
                     {
-                       pinInput.value = pinInput.value.slice(0, -1);
-                       console.log('deleted...');
+                        //console.log('delete...', pinInput.value[pinInput.value.length-1]);
+                        pinInput.value = pinInput.value.slice(0, -1);
+
 
                         if (pinInput.value.length < minimumPinLen)
                         {
@@ -384,12 +461,14 @@
                     }
                 }
 
-                if (canCheckPin === true)
+                else if (canCheckPin === true)
                 {
                     if (ev.target.innerHTML === 'OK')
                     {
+                        pinCount++;
                         //console.log('If >= 4 i can check: ', pinInput.value.length);
-                        checkPin(ev, pinInput, correctPin);
+                        digitStatus = checkPin(ev, pinInput, correctPin, pinCount, maxPinCount, failCount);
+                        console.log('[R]digitStatus?: ', digitStatus);
                     }
                 }
             }, false);
