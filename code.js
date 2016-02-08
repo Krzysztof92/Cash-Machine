@@ -52,6 +52,14 @@
                             document.getElementById('pin').getElementsByClassName('hints')[2].style.display = 'block';
                             blockCard();
                             break;
+            case 'main-options': document.getElementById('main-options').style.display = 'block';
+                            var mainOpts = document.getElementById('main-options').getElementsByClassName('hints');
+                            for (var i = 0; i < mainOpts.length; i++)
+                            {
+                                mainOpts[i].style.display = 'inline-block';
+                                console.log('mainOpts: ', mainOpts[i]);
+                            }
+                            break;
             case 'exitButton': exit();
                             break;
             default: console.log('Default switch... what to do?');
@@ -120,6 +128,7 @@
         if (Number(pinInput.value) === correctPin)
         {
             console.log('PIN is correct!');
+            accountMenu();
             return 1;
         }
 
@@ -185,71 +194,28 @@
         setTimeout(function()
         {
             location.reload(true);
-        }, 4000);
+        }, 4500);
 
     };
-
-//////////////////////////////////////////
-    //After submit key is pressed
-    submitKey = function()
-    {
-        if (digitStatus == 1)
-        {
-            pinCount++;
-            var correctPIN = 1234;
-            if(pinCount <= 3)
-            {
-                if (onScreen.innerHTML.slice(divLength, divLength + maxDigitLength) == correctPIN)
-                {
-                    setTimeout(accountMenu, 1000);
-                }
-                else
-                {
-                    if (pinCount < 3) onScreen.innerHTML += "<br> Błędny kod PIN! Wpisz PIN ponownie. <br> Pozostało prób: " + (3-pinCount);
-                    allowDigitType = false;
-                    setTimeout(cardInserted, 2500);
-                    if (pinCount == 3 && (onScreen.innerHTML.slice(divLength, maxDigitLength) != correctPIN))
-                    {
-                       //// onScreen.innerHTML += "<br>Przekroczono limit prób - blokada";
-                        allowDigitType = false;
-                        setTimeout(exit, 2500);
-                    }
-                }
-
-            }
-        }
-        else if (digitStatus == 2)
-        {
-            menuStatus = 1;
-            var currentMoney = parseInt(onScreen.innerHTML.slice(divLength, divLength + digitLength));
-            if (money === "up") accountStatus += currentMoney;
-            else if (money === "down")
-            {
-                if (currentMoney > accountStatus)
-                {
-                   //// onScreen.innerHTML += "<br>Nie masz wystarczającej ilości środków na koncie! <br>Wpisz mniejszą kwotę.";
-                    //console.log("Nie masz wystarczającej ilości środków na koncie! Wpisz mniejszą kwotę.");
-
-                    setTimeout((new checkAccountStatus()).withdrawMoney(), 2500);
-                }
-                else accountStatus -= currentMoney;
-                document.getElementById("moneySlot").innerHTML = String(currentMoney);
-
-            }
-            //  console.log("accountStatus " + accountStatus);
-        }
-    };
-/////////////////////////////////////////
 
     // Main menu after PIN is accepted
     accountMenu = function()
     {
         console.log('[F] (main) accountMenu?');
 
-        exitStatus = 0;
+        document.getElementById('start').style.display = 'none';
+        document.getElementById('main-menu').style.display = 'block';
+        document.getElementsByClassName('top')[1].style.display = 'block';
+        setTimeout(function()
+        {
+            document.getElementsByClassName('top')[1].style.display = 'none';
+            screenManipulation('main-options');
+        }, 2000);
+
+        /*exitStatus = 0;
         menuStatus = 1;
         allowDigitType = false;
-        digitLength = 0;
+        digitLength = 0;*/
 
     };
 
@@ -304,56 +270,7 @@
     };
 
 
-
-    // Function which handles machine buttons
-   /* actionListener = function(actionName)
-    {
-        switch (actionName)
-        {
-            case 'deposit': if (menuStatus === 1) checkAccountStatus(depositMoney);
-                break;
-            case 'withdraw': if (menuStatus === 1) checkAccountStatus(withdrawMoney);
-                break;
-            case 'accountStatus': if (menuStatus === 1) checkAccountStatus();
-                break;
-            case 'insertCard': if (menuStatus === 0) cardInserted();
-                break;
-            case 'keyOk': /!*if (menuStatus === 0)*!/ submitKey();
-                break;
-            case 'exit': exit();
-                break;
-        }
-    };*/
-
-
-    // Function which handles num keyboard; checks which (sub)menu is now active and maintain appropriate add and delete of digits
-    digitListener = function(value)
-    {
-        if (allowDigitType === false) return;
-
-        function delDigit()
-        {
-            if (onScreen.innerHTML.length > divLength)
-            {
-              ////  onScreen.innerHTML = document.getElementById("screen").innerHTML.slice(0, -1);
-                digitLength--;
-            }
-        }
-
-        if (value === 'delete') delDigit();
-        else if (value !== 'delete')
-        {
-            // console.log("string length " + divLength);
-            if (divLength + digitLength < divLength + maxDigitLength)
-            {
-                document.getElementById("screen").innerHTML += parseInt(value);
-                digitLength++;
-            }
-        }
-    };
-
-
-    // When "wyjdź" pressed
+    // When "wyjdź" is pressed
     exit = function()
     {
         console.log('[F]exit?');
@@ -414,7 +331,7 @@
         function eventsHandling(d)
         {
             var slotListening = true,
-                digitStatus = 0, //0 - when started, 1 - when typing PIN
+                digitStatus = 0,//0 - when started, 1 - when typing PIN, 2 - when Deposit or Withdraw
                 minimumPinLen = 4,
                 canCheckPin = false,
                 pinCount = 0,
