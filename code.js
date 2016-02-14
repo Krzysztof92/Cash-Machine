@@ -52,11 +52,11 @@
                             document.getElementById('pin').getElementsByClassName('hints')[2].style.display = 'block';
                             blockCard();
                             break;
-            case 'main-options': document.getElementById('main-options').style.display = 'block';
+            case 'main-options': document.getElementById('main-options').style.display = 'flex';
                             var mainOpts = document.getElementById('main-options').getElementsByClassName('hints');
                             for (var i = 0; i < mainOpts.length; i++)
                             {
-                                mainOpts[i].style.display = 'inline-block';
+                                mainOpts[i].style.display = 'inline';
                                 console.log('mainOpts: ', mainOpts[i]);
                             }
                             break;
