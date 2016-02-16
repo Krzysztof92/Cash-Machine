@@ -14,6 +14,7 @@
     // Variables for function expressions
     var screenManipulation,
         screenTracker,
+        showOrHide,
         interfaceHandler,
         keyboardHandler,
         slotsHandler,
@@ -39,7 +40,7 @@
         for (var i = 0, el = document.getElementById('screen').childNodes,len = el.length; i < len; i++)
         {
             if (el[i].nodeType === 1 && el[i].style.display !== 'none')
-                console.log('Visible: ', el[i]);
+                ;////console.log('Visible: ', el[i]);
         }
 
         switch (screenName)
@@ -48,30 +49,38 @@
                             break;
             case 'withdrawButton': withdrawMoney();
                             break;
-            case 'checkAccountButton': document.getElementById('main-options').style.display = 'none';
+            case 'checkAccountButton':
+
+                                    console.log('//// WTF?: ', [
+                                        document.getElementById('main-options').classList,
+                                        document.getElementById('status-menu').classList,
+                                        document.getElementById('status-menu').getElementsByClassName('top')[0].classList
+                                    ]);
+
+                                    showOrHide(document.getElementById('main-options')); //.style.display = 'none';
                                     var statusMenu = document.getElementById('status-menu');
-                                    statusMenu.style.display = 'block';
+                                    showOrHide(statusMenu); //.style.display = 'block';
                                     var moneyStatus = statusMenu.getElementsByClassName('top')[0];
-                                    moneyStatus.style.display = 'block';
+                                    showOrHide(moneyStatus); //.style.display = 'block';
 
                                     checkAccountStatus(moneyStatus);
                             break;
-            case 'cardInserted': document.getElementById('pin').style.display = 'block';
-                                document.getElementById('pin').getElementsByClassName('hints')[0].style.display = 'block';
+            case 'cardInserted': showOrHide(document.getElementById('pin')); //.style.display = 'block';
+                            showOrHide(document.getElementById('pin').getElementsByClassName('hints')[0]); //.style.display = 'block';
                                 //checkPin();
                             break;
-            case 'wrongPin': document.getElementById('pin').getElementsByClassName('hints')[0].style.display = 'none';
-                            document.getElementById('pin').getElementsByClassName('hints')[1].style.display = 'block';
+            case 'wrongPin': showOrHide(document.getElementById('pin').getElementsByClassName('hints')[0]); //.style.display = 'none';
+                            showOrHide(document.getElementById('pin').getElementsByClassName('hints')[1]); //.style.display = 'block';
                             break;
-            case 'blocked': document.getElementById('pin').getElementsByClassName('hints')[1].style.display = 'none';
-                            document.getElementById('pin').getElementsByClassName('hints')[2].style.display = 'block';
+            case 'blocked': showOrHide(document.getElementById('pin').getElementsByClassName('hints')[1]); //.style.display = 'none';
+                            showOrHide(document.getElementById('pin').getElementsByClassName('hints')[2]); //.style.display = 'block';
                             blockCard();
                             break;
-            case 'main-options': document.getElementById('main-options').style.display = 'flex';
+            case 'main-options': showOrHide(document.getElementById('main-options'), 'rwd'); //.style.display = 'flex';
                             var mainOpts = document.getElementById('main-options').getElementsByClassName('hints');
                             for (var i = 0; i < mainOpts.length; i++)
                             {
-                                mainOpts[i].style.display = 'inline-block';
+                                showOrHide(mainOpts[i], 'multi'); //.style.display = 'inline-block';
                             }
                             break;
             case 'exitButton': exit();
@@ -80,6 +89,45 @@
                             break;
         }
 
+    };
+
+    showOrHide = function(elem, type)
+    {
+        var visible = type === 'multi' ? 'showMultiLine' : type === 'rwd' ? 'showFlex' : 'showSingleLine';
+
+        //console.log('>>??>> LEN: ',elem.classList.length);
+        if (elem.classList.length > 2)
+        {
+            console.log('>>>> more than 2??');
+            visible = elem.classList[1];
+        }
+
+        function hide()
+        {
+            console.log('???Hide?? ', elem.classList, ' || ', visible);
+            elem.classList.remove(visible);
+            elem.classList.add('hide');
+            console.log('--- I hid it! >', elem.classList);
+        }
+
+        function show()
+        {
+            console.log('!!!Show?? ', elem.classList);
+            elem.classList.remove('hide');
+            elem.classList.add(visible);
+            console.log('=== I showed it! >', elem.classList);
+        }
+
+        if (Array.isArray(elem))
+        {
+            elem.forEach(function()
+            {
+                elem.classList.contains('hide') ? show() : hide();
+                /*if (elem.classList.contains('hide')) show();
+                else hide();*/
+            });
+        }
+        else elem.classList.contains('hide') ? show() : hide();
     };
 
     //Invokes every time some button in interface is pressed
@@ -123,7 +171,7 @@
             console.log('intervalId: ', intervalId);
             clearInterval(intervalId);
 
-            iC.style.display = 'none';
+            showOrHide(iC); //.style.display = 'none';
             cS.style.background = 'blue';
             cS.style.color = 'white';
 
@@ -219,12 +267,12 @@
 
         menuStatus = 1;
 
-        document.getElementById('start').style.display = 'none';
-        document.getElementById('main-menu').style.display = 'block';
-        document.getElementsByClassName('top')[1].style.display = 'block';
+        showOrHide(document.getElementById('start')); //.style.display = 'none';
+        showOrHide(document.getElementById('main-menu')); //.style.display = 'block';
+        showOrHide(document.getElementsByClassName('top')[1]); //.style.display = 'block';
         setTimeout(function()
         {
-            document.getElementsByClassName('top')[1].style.display = 'none';
+            showOrHide(document.getElementsByClassName('top')[1]); //.style.display = 'none';
             screenManipulation('main-options');
         }, 2000);
 
@@ -457,9 +505,9 @@
             s = document.getElementById('start'),
             cS = document.getElementById('cardSlot');
 
-        iC.style.display = 'block';
+        /*iC.style.display = 'block';
 
-        s.style.display = 'block';
+        s.style.display = 'block';*/
 
         cS.style.color = 'green';
         cS.style.background = 'white';

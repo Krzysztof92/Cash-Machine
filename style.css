@@ -284,3 +284,19 @@ body
 {
     display: none;
 }
+
+/* below classes shows elements with various types of display */
+.showSingleLine
+{
+    display: block;
+}
+
+.showMultiLine
+{
+    display: inline-block;
+}
+
+.showFlex
+{
+    display: flex;
+}
