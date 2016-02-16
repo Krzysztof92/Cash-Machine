@@ -103,7 +103,7 @@ body
 
 .main-menus, .top, .sub-menus, .hints
 {
-    display: none;
+    /* display: none; */
 }
 
 .sub-menus
@@ -277,4 +277,10 @@ body
     z-index: 0;
     /*margin-right: -100px;*/
     /* display: none;*/
+}
+
+/* hides every element with this class */
+.hide
+{
+    display: none;
 }

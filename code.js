@@ -13,12 +13,14 @@
 
     // Variables for function expressions
     var screenManipulation,
+        screenTracker,
         interfaceHandler,
         keyboardHandler,
         slotsHandler,
         checkPin,
         submitKey,
-        accountMenu,
+        menuStatus = 0,// 0 - when NOT in menu yet, 1 - when in main-menu, 2 - when in sub-menu
+        screensArr = [],
         checkAccountStatus,
         depositMoney,
         withdrawMoney,
@@ -34,13 +36,25 @@
         var screenName = scrName;
         console.log('Current screenName: ', screenName);
 
+        for (var i = 0, el = document.getElementById('screen').childNodes,len = el.length; i < len; i++)
+        {
+            if (el[i].nodeType === 1 && el[i].style.display !== 'none')
+                console.log('Visible: ', el[i]);
+        }
+
         switch (screenName)
         {
             case 'depositButton': depositMoney();
                             break;
             case 'withdrawButton': withdrawMoney();
                             break;
-            case 'checkAccountButton': checkAccountStatus();
+            case 'checkAccountButton': document.getElementById('main-options').style.display = 'none';
+                                    var statusMenu = document.getElementById('status-menu');
+                                    statusMenu.style.display = 'block';
+                                    var moneyStatus = statusMenu.getElementsByClassName('top')[0];
+                                    moneyStatus.style.display = 'block';
+
+                                    checkAccountStatus(moneyStatus);
                             break;
             case 'cardInserted': document.getElementById('pin').style.display = 'block';
                                 document.getElementById('pin').getElementsByClassName('hints')[0].style.display = 'block';
@@ -57,8 +71,7 @@
                             var mainOpts = document.getElementById('main-options').getElementsByClassName('hints');
                             for (var i = 0; i < mainOpts.length; i++)
                             {
-                                mainOpts[i].style.display = 'inline';
-                                console.log('mainOpts: ', mainOpts[i]);
+                                mainOpts[i].style.display = 'inline-block';
                             }
                             break;
             case 'exitButton': exit();
@@ -204,6 +217,8 @@
     {
         console.log('[F] (main) accountMenu?');
 
+        menuStatus = 1;
+
         document.getElementById('start').style.display = 'none';
         document.getElementById('main-menu').style.display = 'block';
         document.getElementsByClassName('top')[1].style.display = 'block';
@@ -220,14 +235,17 @@
 
     };
 
-    checkAccountStatus = function()
+    checkAccountStatus = function(currentMoney)
     {
         console.log('[F]checkAccountStatus?');
 
-        exitStatus = 1;
         menuStatus = 2;
-        allowDigitType = false;
-        maxDigitLength = accountStatus.toString().length;
+
+        var currentMoneyStatus = customer.getCustomerAccountStatus(),
+            currency = ' PLN';
+        console.log('Current money: ', currentMoneyStatus);
+        currentMoney.innerHTML += ' ' + currentMoneyStatus + currency;
+
         //  console.log("accountStatus "+accountStatus);
        // onScreen.innerHTML = "Twój stan konta wynosi: " + accountStatus + "PLN";
 
@@ -277,16 +295,15 @@
         console.log('[F]exit?');
 
         //////////////////////
-        /*switch (exitStatus)
+        switch (menuStatus)
         {
             case 0: location.reload(true);
                 break;
-            case 1: accountMenu();
+            case 2: screenManipulation();
+                    accountMenu();
                 break;
         }
-        exitStatus = 0;*/
     };
-
 
     customer = {
 
@@ -297,36 +314,43 @@
 
         loadDefaults : function()
         {
-            console.log('localStorage STATUS: ', localStorage, ' len ', localStorage.length);
+            ////console.log('localStorage STATUS: ', localStorage, ' len ', localStorage.length);
             if (!localStorage.getItem('0') || localStorage.length === 0)
             {
-                console.log('C: ', this);
                 console.log('Beginning localStorage: ', localStorage);
-                alert('Nie znaleziono żadnego użytkownika! Zostanie utworzone konto gościa.');
+
                 localStorage.setItem(customer.number.toString(), JSON.stringify({
-                        name : customer.name,
-                        pin : customer.pin,
-                        money : customer.money
-                    }));
+                    name : customer.name,
+                    pin : customer.pin,
+                    money : customer.money
+                }));
+
+                alert('Nie znaleziono żadnego użytkownika! Dlatego utworzono konto gościa.' + this.showAccounts());
 
                 console.log('Created guest user in localStorage: ', localStorage);
             }
 
             else if (localStorage.getItem('0') && localStorage.length === 1)
             {
-                alert('Konto gościa jest aktywne. Zaloguj się na nie lub utwórz swoje konto.');
+                alert('Konto gościa jest aktywne. Zaloguj się na nie lub utwórz swoje konto.' + this.showAccounts());
             }
 
             else if (localStorage.length > 1)
             {
-                var availableAccounts = this.showAccounts();
-                alert('Dostępne konta: ' + availableAccounts);
+                var availableAccounts = this.showAccounts('no');
+
+                ////alert(availableAccounts);
             }
         },
 
-        showAccounts : function()
+        showAccounts : function(newLine)
         {
-            var str = '';
+
+            var cpArr = [], cpObj = {},
+                str = '\n\nDostępne konta:';
+
+            if (newLine === 'no') str = str.slice(2);
+            str += '\n       | Nazwa  |  PIN  |  Budżet |\n        ';
 
             for (var outer in localStorage)
             {
@@ -336,11 +360,26 @@
                     //console.log('OUTER: ', lS);
                     for (var inner in lS)
                     {
-                        console.log('INNER: ',inner, ' ', lS[inner]);
-                        str += lS[inner] + ' ';
+
+                        ////console.log('INNER: ',inner, ' ', lS[inner]);
+                        cpObj[inner] = lS[inner];
+                        //console.log('cpObj: ', cpObj);
+                        str += ' ' + lS[inner] + ' | ';
+
+                        if (inner == 'name')
+                        {
+                            str = str.slice(0, str.length-2) + '   |';
+                        }
+                        else if (inner == 'money')
+                        {
+                            str = str.slice(0, str.length-2) + '\n        ';
+                        }
                     }
+                    cpArr.push(cpObj);
+                    cpObj = {};
                 }
             }
+            //console.log('cpArr: ', cpArr);
             return str;
         },
 
@@ -354,7 +393,7 @@
             return this.pin;
         },
 
-        getCustomerMoney : function()
+        getCustomerAccountStatus : function()
         {
             return this.money;
         }
@@ -381,8 +420,8 @@
 
     var customerName = customer.getCustomerName(),
         customerPin = customer.getCustomerPinCode(),
-        customerMoney = customer.getCustomerMoney();
-    console.log('Default customerName: ', customerName, ' ', customerPin, ' ', customerMoney);
+        customerMoney = customer.getCustomerAccountStatus();
+    console.log('Default customer: ', customerName, ' ', customerPin, ' ', customerMoney);
 
     //function Customer(name, ownPin)
     //{
