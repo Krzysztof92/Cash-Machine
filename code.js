@@ -25,7 +25,8 @@
         actionListener,
         digitListener,
         blockCard,
-        exit;
+        exit,
+        customer;
 
     //Changes menus screen depend of which one is chosen
     screenManipulation = function(scrName)
@@ -287,6 +288,126 @@
     };
 
 
+    customer = {
+
+        number : 0,
+        name : 'Gość',
+        pin : 1234,
+        money : 12000,
+
+        loadDefaults : function()
+        {
+            console.log('localStorage STATUS: ', localStorage, ' len ', localStorage.length);
+            if (!localStorage.getItem('0') || localStorage.length === 0)
+            {
+                console.log('C: ', this);
+                console.log('Beginning localStorage: ', localStorage);
+                alert('Nie znaleziono żadnego użytkownika! Zostanie utworzone konto gościa.');
+                localStorage.setItem(customer.number.toString(), JSON.stringify({
+                        name : customer.name,
+                        pin : customer.pin,
+                        money : customer.money
+                    }));
+
+                console.log('Created guest user in localStorage: ', localStorage);
+            }
+
+            else if (localStorage.getItem('0') && localStorage.length === 1)
+            {
+                alert('Konto gościa jest aktywne. Zaloguj się na nie lub utwórz swoje konto.');
+            }
+
+            else if (localStorage.length > 1)
+            {
+                var availableAccounts = this.showAccounts();
+                alert('Dostępne konta: ' + availableAccounts);
+            }
+        },
+
+        showAccounts : function()
+        {
+            var str = '';
+
+            for (var outer in localStorage)
+            {
+                if (localStorage.hasOwnProperty(outer))
+                {
+                    var lS = JSON.parse(localStorage[outer]);
+                    //console.log('OUTER: ', lS);
+                    for (var inner in lS)
+                    {
+                        console.log('INNER: ',inner, ' ', lS[inner]);
+                        str += lS[inner] + ' ';
+                    }
+                }
+            }
+            return str;
+        },
+
+        getCustomerName : function()
+        {
+            return this.name;
+        },
+
+        getCustomerPinCode : function()
+        {
+            return this.pin;
+        },
+
+        getCustomerMoney : function()
+        {
+            return this.money;
+        }
+
+    };
+
+    (function()
+    {
+        customer.loadDefaults();
+    }());
+
+    /*(function()
+    {
+        if (!localStorage.getItem('0'))
+        {
+            console.log('NOPE default localStorage item');
+            localStorage.setItem('0', JSON.stringify({ name : 'Default Name', money : 12000 }) );
+        }
+        else
+        {
+            console.log('Yep, localStorage has default values');
+        }
+    }());*/
+
+    var customerName = customer.getCustomerName(),
+        customerPin = customer.getCustomerPinCode(),
+        customerMoney = customer.getCustomerMoney();
+    console.log('Default customerName: ', customerName, ' ', customerPin, ' ', customerMoney);
+
+    //function Customer(name, ownPin)
+    //{
+    //    var ownerName = name,
+    //        ownerPin = ownPin;
+    //
+    //    this.getOwnerName = function()
+    //    {
+    //        console.log('Owner name is: ', ownerName);
+    //    };
+    //
+    //    /*this.getOwnerPinCode = function()
+    //    {
+    //        return ownerPin;
+    //    }*/
+    //}
+    //
+    //Customer.prototype.getOwnerPinCode = function()
+    //{
+    //    return this.ownerPin;
+    //};
+    //
+    //var owner = new Customer('tester', 1234);
+    //owner.getOwnerName();
+
     // Site start
     function start()
     {
@@ -326,7 +447,7 @@
         // console.log("inner length " + onScreen.innerHTML.length);
         ////pinCount = 0;
 
-        var correctPin = Number(1234);
+        var correctPin = 1234; //Number(owner.getOwnerPinCode());
 
         function eventsHandling(d)
         {

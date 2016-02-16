@@ -117,8 +117,6 @@ body
     flex-wrap: wrap;
     justify-content: space-between;
     align-content: center;
-    /*align-items: stretch;*/
-
 }
 
 #main-options .hints
