@@ -101,10 +101,10 @@ body
     padding: 2px;
 }
 
-.main-menus, .top, .sub-menus, .hints
+/*.main-menus, .top, .sub-menus, .hints
 {
-    /* display: none; */
-}
+     display: none;
+}*/
 
 .sub-menus
 {
@@ -282,7 +282,7 @@ body
 /* hides every element with this class */
 .hide
 {
-    display: none;
+    display: none !important;
 }
 
 /* below classes shows elements with various types of display */

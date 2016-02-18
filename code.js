@@ -22,6 +22,7 @@
         submitKey,
         menuStatus = 0,// 0 - when NOT in menu yet, 1 - when in main-menu, 2 - when in sub-menu
         screensArr = [],
+        accountMenu,
         checkAccountStatus,
         depositMoney,
         withdrawMoney,
@@ -51,12 +52,13 @@
                             break;
             case 'checkAccountButton':
 
-                                    console.log('//// WTF?: ', [
+                                    /*console.log('//// WTF?: ', [
                                         document.getElementById('main-options').classList,
                                         document.getElementById('status-menu').classList,
                                         document.getElementById('status-menu').getElementsByClassName('top')[0].classList
-                                    ]);
+                                    ]);*/
 
+                                    //showOrHide(document.getElementById('main-menu').getElementsByClassName('top')[0]);
                                     showOrHide(document.getElementById('main-options')); //.style.display = 'none';
                                     var statusMenu = document.getElementById('status-menu');
                                     showOrHide(statusMenu); //.style.display = 'block';
@@ -93,29 +95,72 @@
 
     showOrHide = function(elem, type)
     {
-        var visible = type === 'multi' ? 'showMultiLine' : type === 'rwd' ? 'showFlex' : 'showSingleLine';
+        console.log('/***/ is hidden? ', elem.classList.contains('hide'));
 
         //console.log('>>??>> LEN: ',elem.classList.length);
-        if (elem.classList.length > 2)
+        /*if (elem.classList.length >= 2 && elem.classList[1] !== 'hide')
         {
             console.log('>>>> more than 2??');
             visible = elem.classList[1];
-        }
+        }*/
+
+
 
         function hide()
         {
-            console.log('???Hide?? ', elem.classList, ' || ', visible);
-            elem.classList.remove(visible);
+            var removeIt = elem.classList[1];
+
+            console.log('???Hide?? ', elem.classList, ' || ', JSON.stringify(removeIt));
+
+        /*  if (elem.hasChildNodes())
+            {
+                for (var node in elem.childNodes)
+                {
+                    if (elem.childNodes.hasOwnProperty(node))
+                    {
+                        if (elem.childNodes[node].nodeType === 1)
+                        console.log('~~Node: ', node, ' <> ', elem.childNodes[node]);
+                    }
+                }
+                /!*elem.childNodes.forEach(function(i)
+                {
+                    if (elem.childNodes[i].nodeType === 1)console.log('CHILDS: ', elem.childNodes);
+                });*!/
+
+            }*/
+
+            elem.classList.remove(removeIt);
+
+            if (elem.hasChildNodes())
+            {
+                for (var node in elem.childNodes)
+                {
+                    if (elem.childNodes.hasOwnProperty(node))
+                    {
+                        if (elem.childNodes[node].nodeType === 1)
+                        {
+                            console.log('~~Node: ', node, ' <> ', elem.childNodes[node].classList[1]);
+                            removeIt = elem.childNodes[node].classList[1];
+                            elem.childNodes[node].classList.remove(removeIt);
+                            elem.childNodes[node].classList.add('hide');
+                        }
+                    }
+                }
+            }
+
+            console.log('~~~~removed visibility? ', elem.classList);
             elem.classList.add('hide');
-            console.log('--- I hid it! >', elem.classList);
+            console.log('--- I hid it! >', elem, ' >>> ', elem.classList);
         }
 
         function show()
         {
-            console.log('!!!Show?? ', elem.classList);
+            var visible = type === 'multi' ? 'showMultiLine' : type === 'rwd' ? 'showFlex' : 'showSingleLine';
+
+            ////console.log('!!!Show?? ', elem.classList);
             elem.classList.remove('hide');
             elem.classList.add(visible);
-            console.log('=== I showed it! >', elem.classList);
+            ////console.log('=== I showed it! >', elem.innerHTML, ' >>> ', elem.classList);
         }
 
         if (Array.isArray(elem))
@@ -167,8 +212,8 @@
         if (ev.target.id === 'cardSlot' && slotListen === true)
         {
             console.log('Slots handler ev.target: ', ev.target.innerHTML);
-            console.log('listener? ',slotListen);
-            console.log('intervalId: ', intervalId);
+            ////console.log('listener? ',slotListen);
+            ////console.log('intervalId: ', intervalId);
             clearInterval(intervalId);
 
             showOrHide(iC); //.style.display = 'none';
@@ -197,7 +242,8 @@
         else if (pinCount < 3)
         {
             console.log('PIN is wrong! counter', pinCount);
-            screenManipulation('wrongPin');
+
+            if (pinCount === 1) screenManipulation('wrongPin');
 
             document.getElementsByClassName('typeDigits')[1].value = '';
 
@@ -347,7 +393,7 @@
         {
             case 0: location.reload(true);
                 break;
-            case 2: screenManipulation();
+            case 2: //screenManipulation();
                     accountMenu();
                 break;
         }
