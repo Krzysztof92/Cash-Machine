@@ -331,6 +331,7 @@
         console.log('[F]depositMoney?');
 
 
+
         menuStatus = 3;
 
     };
@@ -507,69 +508,74 @@
         function eventsHandling(d)
         {
             var slotListening = true,
-                digitStatus = 0,//0 - when started, 1 - when typing PIN, 2 - when Deposit or Withdraw
+                pinDigitStatus = 0, //0 - disallowed, 1 - allowed
                 minimumPinLen = 4,
                 canCheckPin = false,
                 pinCount = 0,
                 maxPinCount = 3,
-                failCount = document.getElementById('wrongPin').childNodes[5];
+                failCount = document.getElementById('wrongPin').childNodes[5],
+                moneyDigitStatus = false;
 
             d.getElementById('interface').addEventListener('click', interfaceHandler, false);
             d.getElementById('keyboard').addEventListener('click', function(ev)
             {
-                ////console.log('EV!: ', ev.target.innerHTML);
-                var pinInput = d.getElementsByClassName('typeDigits')[digitStatus - 1];
-
-                //console.log('?pinCount: ', pinCount);
-
-                if (ev.target.tagName.toUpperCase() !== 'DIV' && digitStatus > 0 && Number(ev.target.innerHTML) >= 0)
+                if (!moneyDigitStatus)
                 {
-
-                    pinInput.value += ev.target.innerHTML;
-                    //console.log('pinInput: ', pinInput.value, '|| pressed: ', ev.target.innerHTML);
-
-                    if (pinInput.value.length >= minimumPinLen)
+                    ////console.log('EV!: ', ev.target.innerHTML);
+                    var pinInput = d.getElementsByClassName('typeDigits')[pinDigitStatus - 1];
+                             //console.log('?pinCount: ', pinCount);
+                    if (ev.target.tagName.toUpperCase() !== 'DIV' && pinDigitStatus > 0 && Number(ev.target.innerHTML) >= 0)
                     {
-                        //canCheckPin = keyboardHandler(ev, digitStatus, minimumPinLen, pinInput);
-                        //canCheckPin = checkPin(ev, minimumPinLen, pinInput);
-
-                        canCheckPin = true;
-                    }
-
-                }
-
-                else if (ev.target.innerHTML === 'Del' && digitStatus > 0)
-                {
-                    //console.log('del');
-                    if (pinInput.value.length)
-                    {
-                        //console.log('delete...', pinInput.value[pinInput.value.length-1]);
-                        pinInput.value = pinInput.value.slice(0, -1);
-
-
-                        if (pinInput.value.length < minimumPinLen)
+                         pinInput.value += ev.target.innerHTML;
+                        //console.log('pinInput: ', pinInput.value, '|| pressed: ', ev.target.innerHTML);
+                         if (pinInput.value.length >= minimumPinLen)
                         {
-                            canCheckPin = false;
+                            //canCheckPin = keyboardHandler(ev, digitStatus, minimumPinLen, pinInput);
+                            //canCheckPin = checkPin(ev, minimumPinLen, pinInput);
+                             canCheckPin = true;
+                        }
+                    }
+                    else if (ev.target.innerHTML === 'Del' && pinDigitStatus > 0)
+                    {
+                        //console.log('del');
+                        if (pinInput.value.length)
+                        {
+                            //console.log('delete...', pinInput.value[pinInput.value.length-1]);
+                            pinInput.value = pinInput.value.slice(0, -1);
+                            if (pinInput.value.length < minimumPinLen)
+                            {
+                                canCheckPin = false;
+                            }
+                        }
+                    }
+                    else if (canCheckPin === true)
+                    {
+                        if (ev.target.innerHTML === 'OK')
+                        {
+                            pinCount++;
+                            //console.log('If >= 4 i can check: ', pinInput.value.length);
+                            pinDigitStatus = checkPin(ev, pinInput, correctPin, pinCount, maxPinCount, failCount);
+                            ////console.log('[R]digitStatus?: ', digitStatus);
+
+                            //console.log('after return: ',moneyDigitStatus);
+                            if (pinDigitStatus === 1) moneyDigitStatus = true;
                         }
                     }
                 }
 
-                else if (canCheckPin === true)
+                else
                 {
-                    if (ev.target.innerHTML === 'OK')
-                    {
-                        pinCount++;
-                        //console.log('If >= 4 i can check: ', pinInput.value.length);
-                        digitStatus = checkPin(ev, pinInput, correctPin, pinCount, maxPinCount, failCount);
-                        ////console.log('[R]digitStatus?: ', digitStatus);
-                    }
+                    console.log('... : ',moneyDigitStatus);
                 }
+
+                //console.log(moneyDigitStatus);
+
             }, false);
             d.getElementById('slots').addEventListener('click', function(ev)
             {
                 slotsHandler(ev, intervalId, iC, s, cS, slotListening);
                 slotListening = false;
-                digitStatus = 1;
+                pinDigitStatus = 1;
             }, false);
 
         }
