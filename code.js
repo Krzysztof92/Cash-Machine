@@ -22,7 +22,7 @@
         slotsHandler,
         checkPin,
         submitKey,
-        menuStatus = 0,// 0 - when NOT in menu yet, 1 - when in main-menu, 2 - when in sub-menu
+        menuStatus = 0,// 0 - when NOT in menu yet, 1 - when typing PIN, 2 - when in main-menu, 3 - when in sub-menu
         screensArr = [],
         accountMenu,
         checkAccountStatus,
@@ -240,6 +240,8 @@
     {
         if (ev.target.id === 'cardSlot' && slotListen === true)
         {
+            menuStatus = 1;
+
             console.log('Slots handler ev.target: ', ev.target.innerHTML);
             ////console.log('listener? ',slotListen);
             ////console.log('intervalId: ', intervalId);
@@ -264,7 +266,7 @@
         if (Number(pinInput.value) === correctPin)
         {
             console.log('PIN is correct!');
-            accountMenu();
+            accountMenu(true);
             return 1;
         }
 
@@ -311,6 +313,7 @@
     blockCard = function()
     {
         var blink = 0;
+        menuStatus = 0;
 
         setInterval(function()
         {
@@ -330,7 +333,9 @@
 
         setTimeout(function()
         {
-            location.reload(true);
+            window.open (originPath,'_self',false);
+            /*location.href = originPath;
+            location.reload(true);*/
         }, 4500);
 
     };
@@ -340,7 +345,7 @@
     {
         console.log('[F] (main) accountMenu?');
 
-        menuStatus = 1;
+        menuStatus = 2;
 
         if (!entry) screenManipulation('main-options');
 
@@ -371,13 +376,16 @@
     {
         console.log('[F]checkAccountStatus?');
 
-        menuStatus = 2;
+        menuStatus = 3;
 
         var currentMoney = document.getElementById('status-menu').getElementsByClassName('top')[0],
             currentMoneyStatus = customer.getCustomerAccountStatus(),
             currency = ' PLN';
         console.log('Current money: ', currentMoneyStatus);
-        currentMoney.innerHTML += ' ' + currentMoneyStatus + currency;
+        if (currentMoney.innerHTML.indexOf(currentMoneyStatus) < 0)
+                currentMoney.innerHTML += ' ' + currentMoneyStatus + currency;
+        ////console.log('Current money InnerHTML: ', currentMoney.innerHTML);
+
 
         //  console.log("accountStatus "+accountStatus);
        // onScreen.innerHTML = "Twój stan konta wynosi: " + accountStatus + "PLN";
@@ -392,7 +400,7 @@
         console.log('[F]depositMoney?');
 
         exitStatus = 1;
-        menuStatus = 2;
+        menuStatus = 3;
         digitStatus = 2;
         allowDigitType = true;
         //// onScreen.innerHTML = "Kwota do wpłaty: ";
@@ -409,7 +417,7 @@
         console.log('[F]withdrawMoney?');
 
         exitStatus = 1;
-        menuStatus = 2;
+        menuStatus = 3;
         digitStatus = 2;
         allowDigitType = true;
         //// onScreen.innerHTML = "Kwota do wypłaty: ";
@@ -428,13 +436,15 @@
         console.log('[F]exit?');
 
         //////////////////////
-        switch (menuStatus)
+        if (menuStatus === 1 || menuStatus === 2)
         {
-            case 0: location.reload(true);
-                break;
-            case 2: //screenManipulation();
-                    accountMenu();
-                break;
+            var c = confirm ('Czy na pewno chcesz wyjść z bankomatu?');
+            if (c) window.open (originPath, '_self', false);
+            //location.reload(true);
+        }
+        else if (menuStatus === 3)
+        {
+           accountMenu();
         }
     };
 
