@@ -38,7 +38,7 @@
 
         moveTo : function(id)
         {
-            console.log('go to? : ', this[id]);
+            ////console.log('go to? : ', this[id]);
             location.href = originPath + '#' + this[id];
         }
     };
@@ -48,7 +48,7 @@
     screenManipulation = function(scrName)
     {
         var screenName = scrName;
-        console.log('Current screenName: ', screenName);
+        ////console.log('Current screenName: ', screenName);
 
         for (var i = 0, el = document.getElementById('screen').childNodes,len = el.length; i < len; i++)
         {
@@ -58,9 +58,11 @@
 
         switch (screenName)
         {
-            case 'depositButton': depositMoney();
+            case 'depositButton':  screensObj.moveTo('depositMenu');
+                            depositMoney();
                             break;
-            case 'withdrawButton': withdrawMoney();
+            case 'withdrawButton':  screensObj.moveTo('withdrawMenu');
+                            withdrawMoney();
                             break;
             case 'checkAccountButton':
 
@@ -175,8 +177,11 @@
     {
         if (ev.target.tagName.toUpperCase() !== 'INPUT' && ev.target.tagName.toUpperCase() !== 'P' && ev.target.tagName.toUpperCase() !== 'DIV')
         {
-            console.log('\n Interface handler ev.target: ', ev.target.id, '|| ', ev.target.tagName);
-            screenManipulation(ev.target.id);
+            if ((menuStatus > 0 && ev.target.id === 'exitButton') || (menuStatus === 2 && ev.target.id !== 'exitButton'))
+            {
+                console.log('\n Interface handler ev.target: ', ev.target.id, '|| ', ev.target.tagName);
+                screenManipulation(ev.target.id);
+            }
         }
     };
 
@@ -188,9 +193,9 @@
         {
             menuStatus = 1;
 
-            console.log('Slots handler ev.target: ', ev.target.innerHTML);
-            ////console.log('listener? ',slotListen);
-            ////console.log('intervalId: ', intervalId);
+            ////console.log('Slots handler ev.target: ', ev.target.innerHTML);
+            //console.log('listener? ',slotListen);
+            //console.log('intervalId: ', intervalId);
             clearInterval(intervalId);
 
             //showOrHide(iC); //.style.display = 'none';
@@ -209,14 +214,14 @@
 
         if (Number(pinInput.value) === correctPin)
         {
-            console.log('PIN is correct!');
+            ////console.log('PIN is correct!');
             accountMenu(true);
             return 1;
         }
 
         else if (pinCount < 3)
         {
-            console.log('PIN is wrong! counter', pinCount);
+            ////console.log('PIN is wrong! counter', pinCount);
 
             if (pinCount === 1) screenManipulation('wrongPin');
 
@@ -224,19 +229,19 @@
 
             if (failCount.textContent.length >= 18)
             {
-                console.log('???');
+                //console.log('???');
                 failCount.textContent = failCount.textContent.slice(0, -1);
             }
 
             failCount.textContent += maxPinCount - pinCount;
-            console.log('failCount: ', failCount);
+            //console.log('failCount: ', failCount);
 
             return 2;
         }
 
         else
         {
-            console.log('Your card is blocked!');
+            ////console.log('Your card is blocked!');
 
             screenManipulation('blocked');
 
@@ -311,7 +316,9 @@
         var currentMoney = document.getElementById('status-menu').getElementsByClassName('top')[0],
             currentMoneyStatus = customer.getCustomerAccountStatus(),
             currency = ' PLN';
+
         console.log('Current money: ', currentMoneyStatus);
+
         if (currentMoney.innerHTML.indexOf(currentMoneyStatus) < 0)
                 currentMoney.innerHTML += ' ' + currentMoneyStatus + currency;
         ////console.log('Current money InnerHTML: ', currentMoney.innerHTML);
@@ -322,6 +329,7 @@
     depositMoney = function()
     {
         console.log('[F]depositMoney?');
+
 
         menuStatus = 3;
 
@@ -339,7 +347,7 @@
     // When "wyjdź" is pressed
     exit = function()
     {
-        console.log('[F]exit?');
+        ////console.log('[F]exit?');
 
         //////////////////////
         if (menuStatus === 1 || menuStatus === 2)
@@ -553,7 +561,7 @@
                         pinCount++;
                         //console.log('If >= 4 i can check: ', pinInput.value.length);
                         digitStatus = checkPin(ev, pinInput, correctPin, pinCount, maxPinCount, failCount);
-                        console.log('[R]digitStatus?: ', digitStatus);
+                        ////console.log('[R]digitStatus?: ', digitStatus);
                     }
                 }
             }, false);
