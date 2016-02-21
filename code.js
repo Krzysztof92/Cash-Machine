@@ -12,7 +12,9 @@
         money = "";*/
 
     // Variables for function expressions
-    var screenManipulation,
+    var originPath = location.href,
+        screensObj,
+        screenManipulation,
         screenTracker,
         showOrHide,
         interfaceHandler,
@@ -31,6 +33,26 @@
         blockCard,
         exit,
         customer;
+
+    screensObj = {
+
+        start : 'insertCard',
+        pin : 'pin',
+        access: 'welcome',
+        accountMenu : 'main-options',
+        depositMenu : 'deposit-menu',
+        statusMenu : 'status-menu',
+        withdrawMenu : 'withdraw-menu',
+        settingsMenu: 'settings-menu',
+        exit : 'see-you',
+
+        moveTo : function(id)
+        {
+            console.log('go to? : ', this[id]);
+            location.href = originPath + '#' + this[id];
+        }
+    };
+
 
     //Changes menus screen depend of which one is chosen
     screenManipulation = function(scrName)
@@ -59,16 +81,21 @@
                                     ]);*/
 
                                     //showOrHide(document.getElementById('main-menu').getElementsByClassName('top')[0]);
-                                    showOrHide(document.getElementById('main-options')); //.style.display = 'none';
+
+                                    screensObj.moveTo('statusMenu');
+
+                                    /*showOrHide(document.getElementById('main-options')); //.style.display = 'none';
                                     var statusMenu = document.getElementById('status-menu');
                                     showOrHide(statusMenu); //.style.display = 'block';
                                     var moneyStatus = statusMenu.getElementsByClassName('top')[0];
-                                    showOrHide(moneyStatus); //.style.display = 'block';
+                                    showOrHide(moneyStatus); //.style.display = 'block';*/
 
-                                    checkAccountStatus(moneyStatus);
+                                    checkAccountStatus();
                             break;
-            case 'cardInserted': showOrHide(document.getElementById('pin')); //.style.display = 'block';
-                            showOrHide(document.getElementById('pin').getElementsByClassName('hints')[0]); //.style.display = 'block';
+            case 'cardInserted': ////showOrHide(document.getElementById('pin')); //.style.display = 'block';
+                            ////showOrHide(document.getElementById('pin').getElementsByClassName('hints')[0]); //.style.display = 'block';
+                            screensObj.moveTo('pin');
+
                                 //checkPin();
                             break;
             case 'wrongPin': showOrHide(document.getElementById('pin').getElementsByClassName('hints')[0]); //.style.display = 'none';
@@ -78,12 +105,14 @@
                             showOrHide(document.getElementById('pin').getElementsByClassName('hints')[2]); //.style.display = 'block';
                             blockCard();
                             break;
-            case 'main-options': showOrHide(document.getElementById('main-options'), 'rwd'); //.style.display = 'flex';
+            case 'main-options':
+                            screensObj.moveTo('accountMenu');
+                            /*showOrHide(document.getElementById('main-options'), 'rwd'); //.style.display = 'flex';
                             var mainOpts = document.getElementById('main-options').getElementsByClassName('hints');
                             for (var i = 0; i < mainOpts.length; i++)
                             {
                                 showOrHide(mainOpts[i], 'multi'); //.style.display = 'inline-block';
-                            }
+                            }*/
                             break;
             case 'exitButton': exit();
                             break;
@@ -216,7 +245,7 @@
             ////console.log('intervalId: ', intervalId);
             clearInterval(intervalId);
 
-            showOrHide(iC); //.style.display = 'none';
+            //showOrHide(iC); //.style.display = 'none';
             cS.style.background = 'blue';
             cS.style.color = 'white';
 
@@ -307,20 +336,29 @@
     };
 
     // Main menu after PIN is accepted
-    accountMenu = function()
+    accountMenu = function(entry)
     {
         console.log('[F] (main) accountMenu?');
 
         menuStatus = 1;
 
-        showOrHide(document.getElementById('start')); //.style.display = 'none';
+        if (!entry) screenManipulation('main-options');
+
+
+        /*showOrHide(document.getElementById('start')); //.style.display = 'none';
         showOrHide(document.getElementById('main-menu')); //.style.display = 'block';
-        showOrHide(document.getElementsByClassName('top')[1]); //.style.display = 'block';
-        setTimeout(function()
+        showOrHide(document.getElementsByClassName('top')[1]); //.style.display = 'block';*/
+
+        else
         {
-            showOrHide(document.getElementsByClassName('top')[1]); //.style.display = 'none';
-            screenManipulation('main-options');
-        }, 2000);
+            screensObj.moveTo('access');
+
+            setTimeout(function ()
+            {
+                //showOrHide(document.getElementsByClassName('top')[1]); //.style.display = 'none';
+                screenManipulation('main-options');
+            }, 2000);
+        }
 
         /*exitStatus = 0;
         menuStatus = 1;
@@ -329,13 +367,14 @@
 
     };
 
-    checkAccountStatus = function(currentMoney)
+    checkAccountStatus = function()
     {
         console.log('[F]checkAccountStatus?');
 
         menuStatus = 2;
 
-        var currentMoneyStatus = customer.getCustomerAccountStatus(),
+        var currentMoney = document.getElementById('status-menu').getElementsByClassName('top')[0],
+            currentMoneyStatus = customer.getCustomerAccountStatus(),
             currency = ' PLN';
         console.log('Current money: ', currentMoneyStatus);
         currentMoney.innerHTML += ' ' + currentMoneyStatus + currency;
@@ -544,6 +583,8 @@
     // Site start
     function start()
     {
+        console.log('Origin path: ', originPath);
+
         /*var startScr = document.getElementById(''),
             mainMenus = document.getElementsByClassName('main-menus'),
             subMenus = document.getElementsByClassName('sub-menus');*/

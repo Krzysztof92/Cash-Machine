@@ -22,13 +22,13 @@
 
                     <div id="pin" class="sub-menus">
                         <p id="typePin" class="hints">Wprowadź kod PIN: <input class="typeDigits" title="pin" type="text" maxlength="8" value="" disabled></p>
-                        <p id="wrongPin" class="hints">Błędny kod PIN! <br> Wpisz kod PIN ponownie: <input class="typeDigits" title="fixPin" type="text" maxlength="8" value="" disabled><br> Pozostało prób: </p>
-                        <p id="blocked" class="hints">Przekroczono limit prób - blokada!</p>
+                        <p id="wrongPin" class="hints hide">Błędny kod PIN! <br> Wpisz kod PIN ponownie: <input class="typeDigits" title="fixPin" type="text" maxlength="8" value="" disabled><br> Pozostało prób: </p>
+                        <p id="blocked" class="hints hide">Przekroczono limit prób - blokada!</p>
                     </div>
                 </div> <!-- END of Start screen -->
 
                 <div id="main-menu" class="main-menus"> <!-- Main Menu screen -->
-                    <p class="top">Witamy w banku!</p>
+                    <p id="welcome" class="top">Witamy w banku!</p>
 
                     <div id="main-options" class="sub-menus">
                         <p id="payIn" class="hints">Wpłać</p>
@@ -46,7 +46,7 @@
                     <div id="status-menu" class="sub-menus">
                         <p class="top">Twój aktualny stan konta: </p>
 
-                        <p class="hints">???</p>
+                        <p class="hints hide">???</p>
                     </div>
 
                     <div id="withdraw-menu" class="sub-menus">
@@ -61,6 +61,10 @@
                         <p class="hints">???</p>
                     </div>
                 </div> <!-- END of Main Menu screen -->
+
+                <div id="exit" class="main-menus">
+                    <p id="see-you" class="top">Have a nice day and see You again!</p>
+                </div>
             </div> <!-- END of SCREEN -->
 
             <div id="buttonR"> <!-- right buttons -->
