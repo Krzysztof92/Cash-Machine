@@ -1,15 +1,5 @@
 //(function ()
 //{
-    // Function flags
-    /*var exitStatus = 0, //0 - when in menu; 1 - when in submenu
-        menuStatus = 0, //0 - when not logged in; 1 - when in menu, 2-when in submenu
-        digitStatus = 0, //0 - when card not inserted; 1 - when typing PIN, 2-when typing amount of cash to deposit/withdraw
-        allowDigitType = false, //false - turn off keyboard; true - turn on keyboard
-        digitLength = 0,
-        divLength = 0,
-        maxDigitLength = 0,
-        accountStatus = 1000,
-        money = "";*/
 
     // Variables for function expressions
     var originPath = location.href,
@@ -126,37 +116,12 @@
     {
         console.log('/***/ is hidden? ', elem.classList.contains('hide'));
 
-        //console.log('>>??>> LEN: ',elem.classList.length);
-        /*if (elem.classList.length >= 2 && elem.classList[1] !== 'hide')
-        {
-            console.log('>>>> more than 2??');
-            visible = elem.classList[1];
-        }*/
-
-
 
         function hide()
         {
             var removeIt = elem.classList[1];
 
             console.log('???Hide?? ', elem.classList, ' || ', JSON.stringify(removeIt));
-
-        /*  if (elem.hasChildNodes())
-            {
-                for (var node in elem.childNodes)
-                {
-                    if (elem.childNodes.hasOwnProperty(node))
-                    {
-                        if (elem.childNodes[node].nodeType === 1)
-                        console.log('~~Node: ', node, ' <> ', elem.childNodes[node]);
-                    }
-                }
-                /!*elem.childNodes.forEach(function(i)
-                {
-                    if (elem.childNodes[i].nodeType === 1)console.log('CHILDS: ', elem.childNodes);
-                });*!/
-
-            }*/
 
             elem.classList.remove(removeIt);
 
@@ -204,6 +169,7 @@
         else elem.classList.contains('hide') ? show() : hide();
     };
 
+
     //Invokes every time some button in interface is pressed
     interfaceHandler = function(ev)
     {
@@ -214,26 +180,6 @@
         }
     };
 
-    //Invokes every time some keyboard button is pressed
-/*    keyboardHandler = function(ev, digitS, minimumPinLen, pinInput)
-    {
-        //console.log('Keyboard handler ev.target: ', ev.target.innerHTML);
-        ////console.log('[F]keyboardHandler?');
-        ////////////
-
-        console.log('pinInput val: ', pinInput.value, '|| pinInputLen: ', pinInput.value.length);
-
-
-
-        //if (ev.target.tagName.toUpperCase() !== 'DIV' && digitS === 1 && Number(ev.target.innerHTML) >= 0)
-        {
-
-
-            //pinInputVal += ev.target.innerHTML;
-            //console.log('pinInput: ', pinInputVal);
-            //console.log('minimumPinLen: ', minimumPinLen,'|| pinLen: ', pinLen);
-        }
-    };*/
 
     //Invokes when card is inserted (at the beginning)
     slotsHandler = function(ev, intervalId, iC, s, cS, slotListen)
@@ -260,8 +206,6 @@
     {
         ////console.log('[F]checkPin?');
         ////console.log('pinInput val: ', pinInput.value, '/ pinInputLen: ', pinInput.value.length, 'correctPin: ', correctPin);
-
-        //pinCount++;
 
         if (Number(pinInput.value) === correctPin)
         {
@@ -299,15 +243,6 @@
             return 2;
         }
 
-
-        //onScreen.innerHTML = "Wpisz kod PIN: ";
-
-    /*  var onScreen = document.getElementById('screen');
-        divLength = onScreen.innerHTML.length;
-        digitLength = 0;
-        maxDigitLength = 4;
-        digitStatus = 1;
-        allowDigitType = true;*/
     };
 
     blockCard = function()
@@ -365,11 +300,6 @@
             }, 2000);
         }
 
-        /*exitStatus = 0;
-        menuStatus = 1;
-        allowDigitType = false;
-        digitLength = 0;*/
-
     };
 
     checkAccountStatus = function()
@@ -386,12 +316,6 @@
                 currentMoney.innerHTML += ' ' + currentMoneyStatus + currency;
         ////console.log('Current money InnerHTML: ', currentMoney.innerHTML);
 
-
-        //  console.log("accountStatus "+accountStatus);
-       // onScreen.innerHTML = "Twój stan konta wynosi: " + accountStatus + "PLN";
-
-        /*console.log('checkAccountStatus callback? ', callback);
-        if (typeof callback === 'function') callback();*/
     };
 
 
@@ -399,34 +323,16 @@
     {
         console.log('[F]depositMoney?');
 
-        exitStatus = 1;
         menuStatus = 3;
-        digitStatus = 2;
-        allowDigitType = true;
-        //// onScreen.innerHTML = "Kwota do wpłaty: ";
-        divLength = onScreen.innerHTML.length;
-        //var maxDigitLength = maxDigitLength;
-        // amount = onScreen.innerHTML.slice(divLength, maxDigitLength);
 
-        money = "up";
-        //  console.log("maxDigitLength " + maxDigitLength);
     };
 
     withdrawMoney = function()
     {
         console.log('[F]withdrawMoney?');
 
-        exitStatus = 1;
         menuStatus = 3;
-        digitStatus = 2;
-        allowDigitType = true;
-        //// onScreen.innerHTML = "Kwota do wypłaty: ";
-        divLength = onScreen.innerHTML.length;
-        // var maxDigitLength = maxDigitLength;
-        //amount = onScreen.innerHTML.slice(divLength, maxDigitLength);
-        //accountStatus -= amount;
-        money = "down";
-        //  console.log("maxDigitLength " + maxDigitLength);
+
     };
 
 
@@ -548,56 +454,18 @@
         customer.loadDefaults();
     }());
 
-    /*(function()
-    {
-        if (!localStorage.getItem('0'))
-        {
-            console.log('NOPE default localStorage item');
-            localStorage.setItem('0', JSON.stringify({ name : 'Default Name', money : 12000 }) );
-        }
-        else
-        {
-            console.log('Yep, localStorage has default values');
-        }
-    }());*/
 
     var customerName = customer.getCustomerName(),
         customerPin = customer.getCustomerPinCode(),
         customerMoney = customer.getCustomerAccountStatus();
     console.log('Default customer: ', customerName, ' ', customerPin, ' ', customerMoney);
 
-    //function Customer(name, ownPin)
-    //{
-    //    var ownerName = name,
-    //        ownerPin = ownPin;
-    //
-    //    this.getOwnerName = function()
-    //    {
-    //        console.log('Owner name is: ', ownerName);
-    //    };
-    //
-    //    /*this.getOwnerPinCode = function()
-    //    {
-    //        return ownerPin;
-    //    }*/
-    //}
-    //
-    //Customer.prototype.getOwnerPinCode = function()
-    //{
-    //    return this.ownerPin;
-    //};
-    //
-    //var owner = new Customer('tester', 1234);
-    //owner.getOwnerName();
 
     // Site start
     function start()
     {
         console.log('Origin path: ', originPath);
 
-        /*var startScr = document.getElementById(''),
-            mainMenus = document.getElementsByClassName('main-menus'),
-            subMenus = document.getElementsByClassName('sub-menus');*/
         var iC = document.getElementById('insertCard'),
             s = document.getElementById('start'),
             cS = document.getElementById('cardSlot');
@@ -626,12 +494,7 @@
 
         }, 1000);
 
-        //// onScreen = document.getElementById('screen');
-        ////onScreen.innerHTML = "Włoż kartę do czytnika &nbsp; (kliknij /card/)";
-        // console.log("inner length " + onScreen.innerHTML.length);
-        ////pinCount = 0;
-
-        var correctPin = 1234; //Number(owner.getOwnerPinCode());
+        var correctPin = 1234; ////Number(owner.getOwnerPinCode());
 
         function eventsHandling(d)
         {
@@ -701,10 +564,10 @@
                 digitStatus = 1;
             }, false);
 
-
         }
         eventsHandling(document);
 
     }
     start();
+
 //}());
