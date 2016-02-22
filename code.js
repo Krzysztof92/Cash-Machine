@@ -40,6 +40,21 @@
         {
             ////console.log('go to? : ', this[id]);
             location.href = originPath + '#' + this[id];
+        },
+
+        getProperties : function(id)
+        {
+            for (var prop in this)
+            //Object.keys(this).forEach(function(i, prop)
+            {
+                if (this.hasOwnProperty(prop))
+                {
+                    if (id === this[prop])
+                        //console.log('Props? ', id, ' || ', this[prop]); //Object.keys(this), ' i ', i);
+                        return this[prop];
+                }
+            }
+
         }
     };
 
@@ -565,7 +580,15 @@
 
                 else
                 {
-                    console.log('... : ',moneyDigitStatus);
+                    if (ev.target.tagName.toUpperCase() !== 'DIV' && Number(ev.target.innerHTML) >= 0)
+                    {
+                        //console.log('Current menu is: ', location.href.slice(location.href.indexOf('#')));
+
+                        checkElementInClass('buttonLi', location.href.slice(location.href.indexOf('#')+1));
+
+                        //var moneyInput = d.getElementsByClassName('typeDigits')[]
+                    }
+
                 }
 
                 //console.log(moneyDigitStatus);
@@ -580,6 +603,20 @@
 
         }
         eventsHandling(document);
+
+        function checkElementInClass (elemClass, elemId)
+        {
+            var elem = document.getElementsByClassName(elemClass);
+            for (var i = 0, el = elem.length; i < el; i++)
+            {
+                //console.log('ID / id: ', elem[i].id, ' || ', elemId);
+                var currentElem = screensObj.getProperties(elemId);
+
+                if (elem[i].id.indexOf(currentElem.slice(0, currentElem.indexOf('-'))) > -1)
+                    console.log('currentElem: ', currentElem);
+
+            }
+        }
 
     }
     start();
