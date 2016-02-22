@@ -334,9 +334,10 @@
 
         console.log('Current money: ', currentMoneyStatus);
 
+        console.log('Current money InnerHTML: ', JSON.stringify(currentMoney.innerHTML), ' len: ', currentMoney.innerHTML.length);
         if (currentMoney.innerHTML.indexOf(currentMoneyStatus) < 0)
-                currentMoney.innerHTML += ' ' + currentMoneyStatus + currency;
-        ////console.log('Current money InnerHTML: ', currentMoney.innerHTML);
+                currentMoney.innerHTML = currentMoney.innerHTML.slice(0, 26) + ' ' + currentMoneyStatus + currency;
+
 
     };
 
@@ -433,19 +434,21 @@
                     //console.log('OUTER: ', lS);
                     for (var inner in lS)
                     {
-
-                        ////console.log('INNER: ',inner, ' ', lS[inner]);
-                        cpObj[inner] = lS[inner];
-                        //console.log('cpObj: ', cpObj);
-                        str += ' ' + lS[inner] + ' | ';
-
-                        if (inner == 'name')
+                        if (lS.hasOwnProperty(inner))
                         {
-                            str = str.slice(0, str.length-2) + '   |';
-                        }
-                        else if (inner == 'money')
-                        {
-                            str = str.slice(0, str.length-2) + '\n        ';
+                            ////console.log('INNER: ',inner, ' ', lS[inner]);
+                            cpObj[inner] = lS[inner];
+                            //console.log('cpObj: ', cpObj);
+                            str += ' ' + lS[inner] + ' | ';
+
+                            if (inner == 'name')
+                            {
+                                str = str.slice(0, str.length - 2) + '   |';
+                            }
+                            else if (inner == 'money')
+                            {
+                                str = str.slice(0, str.length - 2) + '\n        ';
+                            }
                         }
                     }
                     cpArr.push(cpObj);
@@ -469,6 +472,18 @@
         getCustomerAccountStatus : function()
         {
             return this.money;
+        },
+
+        withdrawCusomerMoney : function(payOut)
+        {
+            this.money - payOut < 0 ? alert('Nie masz tyle pieniędzy!') : this.money -= Number(payOut);
+        },
+
+        depositCustomerMoney : function(payIn)
+        {
+
+            this.money += Number(payIn);
+            console.log('Money type: >', typeof this.money, '< payIn ', typeof payIn);
         }
 
     };
@@ -583,6 +598,8 @@
                 else
                 {
 
+                   /* to FIX => make sure of places when digits can be used  */
+
                     var currentInput = checkElementInClass('buttonLi', location.href.slice(location.href.indexOf('#')+1));
 
                     if (ev.target.tagName.toUpperCase() !== 'DIV' && Number(ev.target.innerHTML) >= 0)
@@ -614,7 +631,15 @@
                     else if (ev.target.innerHTML === 'OK' && canMoveMoney === true)
                     {
                         if (Number(currentInput.value) >= 50 && Number(currentInput.value) <= 4000)
+                        {
+                            if (currentInput.title === 'deposit-cash')
+                                customer.depositCustomerMoney(currentInput.value);
+                            else if (currentInput.title === 'withdraw-cash')
+                                customer.withdrawCusomerMoney(currentInput.value);
+
+                            console.log('Current menu: ', currentInput);
                             console.log('Money moved!!');
+                        }
                         else console.log('You cannot move money');
                     }
 
