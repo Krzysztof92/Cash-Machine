@@ -44,14 +44,19 @@
 
         getProperties : function(id)
         {
+
             for (var prop in this)
             //Object.keys(this).forEach(function(i, prop)
             {
                 if (this.hasOwnProperty(prop))
                 {
+
                     if (id === this[prop])
-                        //console.log('Props? ', id, ' || ', this[prop]); //Object.keys(this), ' i ', i);
+                    {
+                        ////console.log('Props? ', id, ' || ', this[prop]); //Object.keys(this), ' i ', i);
                         return this[prop];
+                    }
+                    //else console.log('id/this[prop]: ', id, ' / ', this[prop]);
                 }
             }
 
@@ -298,9 +303,10 @@
     // Main menu after PIN is accepted
     accountMenu = function(entry)
     {
-        console.log('[F] (main) accountMenu?');
+        ////console.log('[F] (main) accountMenu?');
 
         menuStatus = 2;
+
 
         if (!entry) screenManipulation('main-options');
 
@@ -324,7 +330,7 @@
 
     checkAccountStatus = function()
     {
-        console.log('[F]checkAccountStatus?');
+        ////console.log('[F]checkAccountStatus?');
 
         menuStatus = 3;
 
@@ -334,17 +340,19 @@
 
         console.log('Current money: ', currentMoneyStatus);
 
-        console.log('Current money InnerHTML: ', JSON.stringify(currentMoney.innerHTML), ' len: ', currentMoney.innerHTML.length);
-        if (currentMoney.innerHTML.indexOf(currentMoneyStatus) < 0)
-                currentMoney.innerHTML = currentMoney.innerHTML.slice(0, 26) + ' ' + currentMoneyStatus + currency;
+        ////console.log('Current money InnerHTML: ', JSON.stringify(currentMoney.innerHTML), ' len: ', currentMoney.innerHTML.length);
 
+        /*if (currentMoney.innerHTML.indexOf(currentMoneyStatus) < 0)
+                currentMoney.innerHTML = currentMoney.innerHTML.slice(0, 26) + ' ' + currentMoneyStatus + currency;*/
+
+        currentMoney.querySelector('[title]').value = currentMoneyStatus + currency;
 
     };
 
 
     depositMoney = function()
     {
-        console.log('[F]depositMoney?');
+        ////console.log('[F]depositMoney?');
 
 
 
@@ -354,7 +362,7 @@
 
     withdrawMoney = function()
     {
-        console.log('[F]withdrawMoney?');
+        ////console.log('[F]withdrawMoney?');
 
         menuStatus = 3;
 
@@ -375,7 +383,16 @@
         }
         else if (menuStatus === 3)
         {
-           accountMenu();
+            ////console.log('Leaving menu: ', location.href, ' > ', location.href.slice(location.href.indexOf('#')+1));
+            //var leavingMenu = location.href.slice(location.href.indexOf('#')+1);
+            //if (leavingMenu !== 'status-menu')
+            //{
+                var clearIt = checkElementInClass(); //'buttonRi', location.href.slice(location.href.indexOf('#') + 1));
+                ////console.log('clearIt?: ', clearIt);
+                clearIt.value = '';
+            //}
+
+            accountMenu();
         }
     };
 
@@ -474,9 +491,18 @@
             return this.money;
         },
 
-        withdrawCusomerMoney : function(payOut)
+        withdrawCustomerMoney : function(payOut)
         {
-            this.money - payOut < 0 ? alert('Nie masz tyle pieniędzy!') : this.money -= Number(payOut);
+            if (this.money - payOut < 0)
+            {
+                alert('Nie masz tyle pieniędzy!');
+                return false;
+            }
+            else
+            {
+                this.money -= Number(payOut);
+                return true;
+            }
         },
 
         depositCustomerMoney : function(payIn)
@@ -484,6 +510,8 @@
 
             this.money += Number(payIn);
             console.log('Money type: >', typeof this.money, '< payIn ', typeof payIn);
+
+            return true;
         }
 
     };
@@ -499,6 +527,43 @@
         customerMoney = customer.getCustomerAccountStatus();
     console.log('Default customer: ', customerName, ' ', customerPin, ' ', customerMoney);
 
+    function checkElementInClass() //elemClass, elemId) //elemClass, elemId)
+    {
+        // 'buttonLi', location.href.slice(location.href.indexOf('#')+1));
+
+        var elemId = location.href.slice(location.href.indexOf('#')+1),
+            elem = document.getElementById(elemId),
+            currentElem = screensObj.getProperties(elemId);
+
+        //last version
+        /*var elem = document.getElementsByClassName(elemClass),
+         currentElem = screensObj.getProperties(elemId);*/
+
+        ////console.log('elem: ', elem, /*' elemClass: ', elemClass, */' currentElem: ', currentElem, ' elemId: ', elemId);
+
+        if (elem.id.indexOf(currentElem.slice(0, currentElem.indexOf('-'))) > -1)
+        {
+            ////console.log('Current input: ', document.getElementById(currentElem).querySelector('[title]'));
+            return document.getElementById(currentElem).querySelector('[title]');
+
+        }
+
+        /*var elem = document.getElementsByClassName('buttonLi'),
+            currentElem = screensObj.getProperties(elemId); //location.href.slice(location.href.indexOf('#')+1));*/
+
+        /*for (var i = 0, el = elem.length; i < el; i++)
+        {
+            console.log('ID / id: ', elem[i].id, ' || ', elemId);
+
+            if (elem[i].id.indexOf(currentElem.slice(0, currentElem.indexOf('-'))) > -1)
+            {
+                //console.log('Current input: ', document.getElementById(currentElem).querySelector('[title]'));
+                return document.getElementById(currentElem).querySelector('[title]');
+
+            }
+
+        }*/
+    }
 
     // Site start
     function start()
@@ -600,7 +665,7 @@
 
                    /* to FIX => make sure of places when digits can be used  */
 
-                    var currentInput = checkElementInClass('buttonLi', location.href.slice(location.href.indexOf('#')+1));
+                    var currentInput = checkElementInClass(); //'buttonLi', location.href.slice(location.href.indexOf('#')+1)); //'buttonLi', location.href.slice(location.href.indexOf('#')+1));
 
                     if (ev.target.tagName.toUpperCase() !== 'DIV' && Number(ev.target.innerHTML) >= 0)
                     {
@@ -615,7 +680,7 @@
                         if (currentInput.value.length > 1 && currentInput.value.length <= 4)
                         {
                             canMoveMoney = true;
-                            console.log('Try to move money...');
+                            //console.log('Try to move money...');
                         }
 
                     }
@@ -630,17 +695,25 @@
 
                     else if (ev.target.innerHTML === 'OK' && canMoveMoney === true)
                     {
+                        var operationSuccess = false;
+
                         if (Number(currentInput.value) >= 50 && Number(currentInput.value) <= 4000)
                         {
                             if (currentInput.title === 'deposit-cash')
-                                customer.depositCustomerMoney(currentInput.value);
+                                operationSuccess = customer.depositCustomerMoney(currentInput.value);
                             else if (currentInput.title === 'withdraw-cash')
-                                customer.withdrawCusomerMoney(currentInput.value);
+                                operationSuccess = customer.withdrawCustomerMoney(currentInput.value);
 
-                            console.log('Current menu: ', currentInput);
-                            console.log('Money moved!!');
+                            ////console.log('Current menu: ', currentInput);
+                            /*console.log('Money moved!!');*/
+
+                            if (operationSuccess)
+                                currentInput.value = '';
                         }
-                        else console.log('You cannot move money');
+                        else if (Number(currentInput.value) < 50)
+                            alert('Minimalna kwota to 50 PLN!');
+                        else if (Number(currentInput.value) > 4000)
+                            alert('Maksymalna kwota to 4000 PLN!');
                     }
 
                 }
@@ -657,25 +730,6 @@
 
         }
         eventsHandling(document);
-
-        function checkElementInClass (elemClass, elemId)
-        {
-            var elem = document.getElementsByClassName(elemClass),
-                currentElem = screensObj.getProperties(elemId);
-            for (var i = 0, el = elem.length; i < el; i++)
-            {
-                //console.log('ID / id: ', elem[i].id, ' || ', elemId);
-
-
-                if (elem[i].id.indexOf(currentElem.slice(0, currentElem.indexOf('-'))) > -1)
-                {
-                   //console.log('Current input: ', document.getElementById(currentElem).querySelector('[title]'));
-                    return document.getElementById(currentElem).querySelector('[title]');
-
-                }
-
-            }
-        }
 
     }
     start();
