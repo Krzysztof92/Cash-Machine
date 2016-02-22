@@ -378,7 +378,11 @@
         if (menuStatus === 1 || menuStatus === 2)
         {
             var c = confirm ('Czy na pewno chcesz wyjść z bankomatu?');
-            if (c) window.open (originPath, '_self', false);
+            if (c)
+            {
+
+                window.open (originPath, '_self', false);
+            }
             //location.reload(true);
         }
         else if (menuStatus === 3)
@@ -488,6 +492,9 @@
 
         getCustomerAccountStatus : function()
         {
+            // this.saveCustomerMoney();
+            //this.getCustomerMethods();
+            // this.money = JSON.parse(localStorage.getItem(this.number.toString())).money = ;
             return this.money;
         },
 
@@ -512,6 +519,38 @@
             console.log('Money type: >', typeof this.money, '< payIn ', typeof payIn);
 
             return true;
+        },
+
+
+        getCustomerProperties : function()
+        {
+            var obj = {};
+            for(var prop in this)
+            {
+                if (this.hasOwnProperty(prop))
+                {
+                    if(typeof this[prop] !== "function" && prop != 'number')
+                    {
+                        obj[prop] = this[prop]
+                    }
+                }
+            }
+            console.log('new obj: ', obj);
+            return obj;
+        },
+
+        saveCustomerMoney : function()
+        {
+            //console.log('Customer data in locaStorage: ', localStorage.getItem(this.number.toString()));
+
+            var obj = this.getCustomerProperties();
+
+            localStorage.setItem(this.number.toString(), JSON.stringify(obj));
+
+            /*var obj = JSON.parse(localStorage.getItem(this.number.toString()));
+            obj.money = 666;
+            localStorage.setItem(this.number.toString(), JSON.stringify(obj));
+            console.log('Changed localStorage: ', localStorage);*/
         }
 
     };
