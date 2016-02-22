@@ -529,7 +529,8 @@
                 pinCount = 0,
                 maxPinCount = 3,
                 failCount = document.getElementById('wrongPin').childNodes[5],
-                moneyDigitStatus = false;
+                moneyDigitStatus = false,
+                canMoveMoney = false;
 
             d.getElementById('interface').addEventListener('click', interfaceHandler, false);
             d.getElementById('keyboard').addEventListener('click', function(ev)
@@ -582,25 +583,39 @@
                 else
                 {
 
+                    var currentInput = checkElementInClass('buttonLi', location.href.slice(location.href.indexOf('#')+1));
+
                     if (ev.target.tagName.toUpperCase() !== 'DIV' && Number(ev.target.innerHTML) >= 0)
                     {
                         //console.log('Current menu is: ', location.href.slice(location.href.indexOf('#')));
 
-                        var currentInput = checkElementInClass('buttonLi', location.href.slice(location.href.indexOf('#')+1));
+                        //currentInput = checkElementInClass('buttonLi', location.href.slice(location.href.indexOf('#')+1));
 
-                        console.log('Double? ', currentInput.value, ' || ', ev.target.innerHTML);
+                        //console.log('Double? ', currentInput.value, ' || ', ev.target.innerHTML);
 
                         currentInput.value += ev.target.innerHTML;
 
-                        //console.log('Amount of money: ', currentInput.value);
+                        if (currentInput.value.length > 1 && currentInput.value.length <= 4)
+                        {
+                            canMoveMoney = true;
+                            console.log('Try to move money...');
+                        }
 
-
-                        //var moneyInput = d.getElementsByClassName('typeDigits')[]
                     }
 
-                    else if (canMoveMoney === true)
+                    else if (ev.target.innerHTML === 'Del' && currentInput.value.length > 0)
                     {
+                        //console.log('remove it?');
+                        currentInput.value = currentInput.value.slice(0, -1);
+                        if (currentInput.value.length <= 2)
+                            canMoveMoney = false;
+                    }
 
+                    else if (ev.target.innerHTML === 'OK' && canMoveMoney === true)
+                    {
+                        if (Number(currentInput.value) >= 50 && Number(currentInput.value) <= 4000)
+                            console.log('Money moved!!');
+                        else console.log('You cannot move money');
                     }
 
                 }
