@@ -534,6 +534,7 @@
             d.getElementById('interface').addEventListener('click', interfaceHandler, false);
             d.getElementById('keyboard').addEventListener('click', function(ev)
             {
+
                 if (!moneyDigitStatus)
                 {
                     ////console.log('EV!: ', ev.target.innerHTML);
@@ -580,13 +581,26 @@
 
                 else
                 {
+
                     if (ev.target.tagName.toUpperCase() !== 'DIV' && Number(ev.target.innerHTML) >= 0)
                     {
                         //console.log('Current menu is: ', location.href.slice(location.href.indexOf('#')));
 
-                        checkElementInClass('buttonLi', location.href.slice(location.href.indexOf('#')+1));
+                        var currentInput = checkElementInClass('buttonLi', location.href.slice(location.href.indexOf('#')+1));
+
+                        console.log('Double? ', currentInput.value, ' || ', ev.target.innerHTML);
+
+                        currentInput.value += ev.target.innerHTML;
+
+                        //console.log('Amount of money: ', currentInput.value);
+
 
                         //var moneyInput = d.getElementsByClassName('typeDigits')[]
+                    }
+
+                    else if (canMoveMoney === true)
+                    {
+
                     }
 
                 }
@@ -606,14 +620,19 @@
 
         function checkElementInClass (elemClass, elemId)
         {
-            var elem = document.getElementsByClassName(elemClass);
+            var elem = document.getElementsByClassName(elemClass),
+                currentElem = screensObj.getProperties(elemId);
             for (var i = 0, el = elem.length; i < el; i++)
             {
                 //console.log('ID / id: ', elem[i].id, ' || ', elemId);
-                var currentElem = screensObj.getProperties(elemId);
+
 
                 if (elem[i].id.indexOf(currentElem.slice(0, currentElem.indexOf('-'))) > -1)
-                    console.log('currentElem: ', currentElem);
+                {
+                   //console.log('Current input: ', document.getElementById(currentElem).querySelector('[title]'));
+                    return document.getElementById(currentElem).querySelector('[title]');
+
+                }
 
             }
         }
