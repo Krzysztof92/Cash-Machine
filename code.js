@@ -380,7 +380,7 @@
             var c = confirm ('Czy na pewno chcesz wyjść z bankomatu?');
             if (c)
             {
-
+                customer.saveCustomerMoney();
                 window.open (originPath, '_self', false);
             }
             //location.reload(true);
@@ -402,10 +402,10 @@
 
     customer = {
 
-        number : 0,
-        name : 'Gość',
-        pin : 1234,
-        money : 12000,
+        number : '', //0,
+        name : '', //'Gość',
+        pin : '', //1234,
+        money : '', //12000,
 
         loadDefaults : function()
         {
@@ -414,10 +414,10 @@
             {
                 console.log('Beginning localStorage: ', localStorage);
 
-                localStorage.setItem(customer.number.toString(), JSON.stringify({
-                    name : customer.name,
-                    pin : customer.pin,
-                    money : customer.money
+                localStorage.setItem('0', JSON.stringify({
+                    name : 'Gość', //customer.name,
+                    pin : 1234, //customer.pin,
+                    money : 12000 //customer.money
                 }));
 
                 alert('Nie znaleziono żadnego użytkownika! Dlatego utworzono konto gościa.' + this.showAccounts());
@@ -434,8 +434,20 @@
             {
                 var availableAccounts = this.showAccounts('no');
 
-                ////alert(availableAccounts);
+                //alert(availableAccounts);
             }
+
+            /*for (var prop in this)
+            {
+                if (this.hasOwnProperty(prop))
+                {
+                    console.log('????: ', prop, ' / ', this, ' / ', this[prop]);
+                }
+            }*/
+
+            var c = this.getCustomerProperties();
+            console.log('C ', c);
+            this.setCustomerProperties();
         },
 
         showAccounts : function(newLine)
@@ -525,18 +537,52 @@
         getCustomerProperties : function()
         {
             var obj = {};
+
             for(var prop in this)
             {
                 if (this.hasOwnProperty(prop))
                 {
-                    if(typeof this[prop] !== "function" && prop != 'number')
+                    if(typeof this[prop] !== "function") // && prop != 'number')
                     {
                         obj[prop] = this[prop]
                     }
                 }
             }
-            console.log('new obj: ', obj);
+            console.log('>>From getCustomerProperties: ', obj);
             return obj;
+        },
+
+        setCustomerProperties : function(customerNumber)
+        {
+            console.log('\nBefore filling customer object from LS: ', this, ' LS: ', localStorage);
+
+            var num = customerNumber || (localStorage.length - 1).toString(); //,
+                /*obj = JSON.parse(localStorage.getItem(num));
+            obj.number = Number(num);*/
+
+
+            /*for (var prop in localStorage)
+            {
+                if (localStorage.hasOwnProperty(prop))
+                {
+                    //if (typeof localStorage[prop] !== 'function' && prop != 'number')
+                    {
+                        */var o = JSON.parse(localStorage.getItem(num));
+                        //console.log('Num of customer in LS: ', num);
+                        this.number = Number(num);
+
+                        for (var key in o)
+                        {
+                            if (o.hasOwnProperty(key))
+                            {
+                                //console.log('From LS to customer: ', key, ' / ', o[key]);
+                                this[key] = o[key];
+                            }
+                        }
+                    /*}
+                }
+            }*/
+            console.log('\nAfter feeling ... : ', this);
         },
 
         saveCustomerMoney : function()
@@ -544,8 +590,9 @@
             //console.log('Customer data in locaStorage: ', localStorage.getItem(this.number.toString()));
 
             var obj = this.getCustomerProperties();
+            console.log('Exit OBJ: ', obj);
 
-            localStorage.setItem(this.number.toString(), JSON.stringify(obj));
+            //localStorage.setItem(this.number.toString(), JSON.stringify(obj));
 
             /*var obj = JSON.parse(localStorage.getItem(this.number.toString()));
             obj.money = 666;
@@ -575,7 +622,8 @@
             currentElem = screensObj.getProperties(elemId);
 
         //last version
-        /*var elem = document.getElementsByClassName(elemClass),
+        /*var elem = document.getElementsByCla
+        ssName(elemClass),
          currentElem = screensObj.getProperties(elemId);*/
 
         ////console.log('elem: ', elem, /*' elemClass: ', elemClass, */' currentElem: ', currentElem, ' elemId: ', elemId);
