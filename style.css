@@ -250,6 +250,46 @@ body
     /*margin-left: 200px;*/
 }
 
+#resetButton
+{
+    display: inline-block;
+    width: 33px; /*50px;*/
+    height: 28px; /*45px;*/
+    border: 3px solid red;
+    border-radius: 50%;
+    background: white;
+    color: red;
+    position: absolute;
+    top: 85px;
+    left: 400px;
+}
+
+#resetButton p
+{
+    position: absolute;
+    top: 7px;
+    left: 0;
+    margin: 0;
+    font-size: 8px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+#resetButton:hover
+{
+    cursor: pointer;
+    background: red;
+    color: white;
+    border-color: white;
+    transform: scale(2);
+}
+
+#resetButton:focus
+{
+    outline: none;
+}
+
 #cardSlot
 {
     width: 75px;

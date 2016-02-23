@@ -22,6 +22,7 @@
         digitListener,
         blockCard,
         exit,
+        resetAllData,
         customer;
 
     screensObj = {
@@ -385,7 +386,7 @@
                 setTimeout(function()
                 {
                     window.open(originPath, '_self', false);
-                }, 3500);
+                }, 3000);
             }
             //location.reload(true);
         }
@@ -401,6 +402,19 @@
             //}
 
             accountMenu();
+        }
+    };
+
+
+    // removes all data in localStorage, so then Guest Account with default data will be created
+    resetAllData = function()
+    {
+        var reset = confirm('Czy na pewno chcesz usunąć wszystkie konta użytkowników? Zostanie wtedy utworzone konto Gość z domyślnymi danymi.');
+
+        if (reset)
+        {
+            localStorage.clear();
+            window.open(originPath, '_self', false);
         }
     };
 
@@ -846,6 +860,12 @@
                 slotsHandler(ev, intervalId, iC, s, cS, slotListening);
                 slotListening = false;
                 pinDigitStatus = 1;
+            }, false);
+
+            d.getElementById('resetButton').addEventListener('click', function(ev)
+            {
+                //alert('reset?');
+                resetAllData();
             }, false);
 
         }
