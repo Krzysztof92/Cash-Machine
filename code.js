@@ -383,10 +383,12 @@
             {
                 ////customer.saveCustomerMoney();
                 customer.storeCustomerData();
-                setTimeout(function()
-                {
+                console.log('END localStorage: ', localStorage);
+
+                /*setTimeout(function()
+                {*/
                     window.open(originPath, '_self', false);
-                }, 3000);
+                //}, 3000);
             }
             //location.reload(true);
         }
@@ -413,8 +415,13 @@
 
         if (reset)
         {
-            localStorage.clear();
-            window.open(originPath, '_self', false);
+
+            setTimeout(function()
+            {
+                localStorage.clear();
+                window.open(originPath, '_self', false);
+            }, 2000);
+
         }
     };
 
@@ -574,15 +581,17 @@
             {
                 if (this.hasOwnProperty(prop))
                 {
+                    //if (prop === 'number') console.log('PROP: ', prop, ' typeof: ', typeof prop);
 
-                    if(typeof this[prop] !== "function") // && prop != 'number')
+                    if(typeof this[prop] !== "function" && prop !== 'number')
                     {
                         obj[prop] = this[prop]
                     }
                 }
             }
-            if (includeNumber)
+            if (includeNumber === true)
                 obj.number = this.number;
+
 
             ////console.log('>>From getCustomerProperties: ', obj);
             return obj;
@@ -627,7 +636,7 @@
         // save Customer data IN localStorage
         storeCustomerData : function()
         {
-            localStorage.setItem((this.number).toString(), JSON.stringify(this.getCustomerProperties(true)));
+            localStorage.setItem((this.number).toString(), JSON.stringify(this.getCustomerProperties()));
             console.log('Data stored!: ', localStorage.getItem(this.number));
 
         },
@@ -636,7 +645,7 @@
         {
             //console.log('Customer data in locaStorage: ', localStorage.getItem(this.number.toString()));
 
-            var obj = this.getCustomerProperties();
+            var obj = this.getCustomerProperties(true);
             console.log('Exit OBJ: ', obj);
 
             //localStorage.setItem(this.number.toString(), JSON.stringify(obj));
@@ -864,8 +873,13 @@
 
             d.getElementById('resetButton').addEventListener('click', function(ev)
             {
-                //alert('reset?');
-                resetAllData();
+                if (JSON.stringify(customer.getCustomerProperties()) != localStorage.getItem('0'))
+                {
+                    console.log('Customer props: ', customer.getCustomerProperties(), ' localStorage: ', localStorage.getItem((customer.getCustomerNumber()).toString()));
+                    //alert('reset?');
+                    resetAllData();
+                }
+                else alert('Nie wykryto żadnych zmian. Nie ma potrzeby zastosowania resetu danych.');
             }, false);
 
         }
