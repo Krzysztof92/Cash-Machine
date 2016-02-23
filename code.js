@@ -380,8 +380,12 @@
             var c = confirm ('Czy na pewno chcesz wyjść z bankomatu?');
             if (c)
             {
-                customer.saveCustomerMoney();
-                window.open (originPath, '_self', false);
+                ////customer.saveCustomerMoney();
+                customer.storeCustomerData();
+                setTimeout(function()
+                {
+                    window.open(originPath, '_self', false);
+                }, 3500);
             }
             //location.reload(true);
         }
@@ -407,12 +411,12 @@
         pin : '', //1234,
         money : '', //12000,
 
-        loadDefaults : function()
+        loadAccount : function()
         {
             ////console.log('localStorage STATUS: ', localStorage, ' len ', localStorage.length);
             if (!localStorage.getItem('0') || localStorage.length === 0)
             {
-                console.log('Beginning localStorage: ', localStorage);
+                console.log('Beginning localStorage: \n', localStorage, ' \nempty Customer: ', this);
 
                 localStorage.setItem('0', JSON.stringify({
                     name : 'Gość', //customer.name,
@@ -420,19 +424,25 @@
                     money : 12000 //customer.money
                 }));
 
-                alert('Nie znaleziono żadnego użytkownika! Dlatego utworzono konto gościa.' + this.showAccounts());
+                alert('Nie znaleziono żadnego użytkownika! Dlatego utworzono konto gościa.' + this.showAccountList());
 
-                console.log('Created guest user in localStorage: ', localStorage);
+                this.setCustomerProperties();
+
+                console.log('Created guest user in localStorage: ', localStorage, ' ready Guest Customer: ', this);
+
             }
 
             else if (localStorage.getItem('0') && localStorage.length === 1)
             {
-                alert('Konto gościa jest aktywne. Zaloguj się na nie lub utwórz swoje konto.' + this.showAccounts());
+                alert('Konto gościa jest aktywne. Zaloguj się na nie lub utwórz swoje konto.' + this.showAccountList());
+
+                this.setCustomerProperties();
+
             }
 
             else if (localStorage.length > 1)
             {
-                var availableAccounts = this.showAccounts('no');
+                var availableAccounts = this.showAccountList('no');
 
                 //alert(availableAccounts);
             }
@@ -445,12 +455,14 @@
                 }
             }*/
 
-            var c = this.getCustomerProperties();
-            console.log('C ', c);
-            this.setCustomerProperties();
+            ////
+            /*var c = this.getCustomerProperties();
+            console.log('C ', c);*/
+            ////
+
         },
 
-        showAccounts : function(newLine)
+        showAccountList : function(newLine)
         {
 
             var cpArr = [], cpObj = {},
@@ -490,6 +502,11 @@
             }
             //console.log('cpArr: ', cpArr);
             return str;
+        },
+
+        getCustomerNumber : function()
+        {
+            return this.number;
         },
 
         getCustomerName : function()
@@ -534,7 +551,8 @@
         },
 
 
-        getCustomerProperties : function()
+        // makes an Object of Customer properties (for localStorage usage)
+        getCustomerProperties : function(includeNumber)
         {
             var obj = {};
 
@@ -542,19 +560,24 @@
             {
                 if (this.hasOwnProperty(prop))
                 {
+
                     if(typeof this[prop] !== "function") // && prop != 'number')
                     {
                         obj[prop] = this[prop]
                     }
                 }
             }
-            console.log('>>From getCustomerProperties: ', obj);
+            if (includeNumber)
+                obj.number = this.number;
+
+            ////console.log('>>From getCustomerProperties: ', obj);
             return obj;
         },
 
+        //// why/when to use??
         setCustomerProperties : function(customerNumber)
         {
-            console.log('\nBefore filling customer object from LS: ', this, ' LS: ', localStorage);
+            ////console.log('\nBefore filling customer object from LS: ', this, ' LS: ', localStorage);
 
             var num = customerNumber || (localStorage.length - 1).toString(); //,
                 /*obj = JSON.parse(localStorage.getItem(num));
@@ -582,7 +605,17 @@
                     /*}
                 }
             }*/
-            console.log('\nAfter feeling ... : ', this);
+            ////console.log('\nAfter feeling ... : ', this);
+        },
+        ////////
+
+
+        // save Customer data IN localStorage
+        storeCustomerData : function()
+        {
+            localStorage.setItem((this.number).toString(), JSON.stringify(this.getCustomerProperties(true)));
+            console.log('Data stored!: ', localStorage.getItem(this.number));
+
         },
 
         saveCustomerMoney : function()
@@ -604,14 +637,14 @@
 
     (function()
     {
-        customer.loadDefaults();
+        customer.loadAccount();
     }());
 
 
-    var customerName = customer.getCustomerName(),
+    /*var customerName = customer.getCustomerName(),
         customerPin = customer.getCustomerPinCode(),
-        customerMoney = customer.getCustomerAccountStatus();
-    console.log('Default customer: ', customerName, ' ', customerPin, ' ', customerMoney);
+        customerMoney = customer.getCustomerAccountStatus();*/
+    console.log('Default customer: ', customer.getCustomerName(), ' ', customer.getCustomerPinCode(), ' ', customer.getCustomerAccountStatus());
 
     function checkElementInClass() //elemClass, elemId) //elemClass, elemId)
     {
@@ -685,7 +718,7 @@
 
         }, 1000);
 
-        var correctPin = 1234; ////Number(owner.getOwnerPinCode());
+        var correctPin = Number(customer.getCustomerPinCode()); // 1234; ////Number(owner.getOwnerPinCode());
 
         function eventsHandling(d)
         {
