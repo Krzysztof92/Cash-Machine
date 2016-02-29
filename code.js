@@ -23,7 +23,8 @@
         blockCard,
         exit,
         resetAllData,
-        customer;
+        customer,
+        defaultCustomer;
 
     screensObj = {
 
@@ -309,7 +310,10 @@
         menuStatus = 2;
 
 
-        if (!entry) screenManipulation('main-options');
+        if (!entry)
+        {
+            screenManipulation('main-options');
+        }
 
 
         /*showOrHide(document.getElementById('start')); //.style.display = 'none';
@@ -402,7 +406,7 @@
                 ////console.log('clearIt?: ', clearIt);
                 clearIt.value = '';
             //}
-
+            ////if (location.href.slice(location.href.indexOf('#')+1) !== 'status-menu' )
             accountMenu();
         }
     };
@@ -425,6 +429,7 @@
         }
     };
 
+
     customer = {
 
         number : '', //0,
@@ -439,11 +444,17 @@
             {
                 console.log('Beginning localStorage: \n', localStorage, ' \nempty Customer: ', this);
 
-                localStorage.setItem('0', JSON.stringify({
+
+
+                localStorage.setItem((this.getCustomerNumber.call(defaultCustomer)).toString(), JSON.stringify(
+                    this.getCustomerProperties.call(defaultCustomer)
+                ));
+
+                /*localStorage.setItem('0', JSON.stringify({
                     name : 'Gość', //customer.name,
                     pin : 1234, //customer.pin,
                     money : 12000 //customer.money
-                }));
+                }));*/
 
                 alert('Nie znaleziono żadnego użytkownika! Dlatego utworzono konto gościa.' + this.showAccountList());
 
@@ -558,6 +569,7 @@
             else
             {
                 this.money -= Number(payOut);
+                showOrHide(document.getElementById('withdraw-menu').getElementsByClassName('hints')[0]);
                 return true;
             }
         },
@@ -658,6 +670,16 @@
 
     };
 
+
+    defaultCustomer = {
+        number : 0,
+        name : 'Gość',
+        pin : 1234,
+        money : 12000
+    };
+
+    ////defaultCustomer.getDefaultCustomerProperties = customer.getCustomerProperties;
+
     (function()
     {
         customer.loadAccount();
@@ -667,7 +689,9 @@
     /*var customerName = customer.getCustomerName(),
         customerPin = customer.getCustomerPinCode(),
         customerMoney = customer.getCustomerAccountStatus();*/
-    console.log('Default customer: ', customer.getCustomerName(), ' ', customer.getCustomerPinCode(), ' ', customer.getCustomerAccountStatus());
+
+    console.log('Default customer: ', customer.getCustomerProperties.call(defaultCustomer, true));
+    console.log('Current customer: ', customer.getCustomerProperties(true)); // customer.getCustomerName(), ' ', customer.getCustomerPinCode(), ' ', customer.getCustomerAccountStatus());
 
     function checkElementInClass() //elemClass, elemId) //elemClass, elemId)
     {
@@ -873,7 +897,10 @@
 
             d.getElementById('resetButton').addEventListener('click', function(ev)
             {
-                if (JSON.stringify(customer.getCustomerProperties()) != localStorage.getItem('0'))
+                if (JSON.stringify(customer.getCustomerProperties.call(defaultCustomer, true)) !== JSON.stringify(customer.getCustomerProperties(true))
+                        ||  localStorage.length > 1)
+                //if (JSON.stringify(defaultCustomer.getDefaultCustomerProperties(true)) !== JSON.stringify(customer.getCustomerProperties(true)))
+                //if (JSON.stringify(customer.getCustomerProperties()) != localStorage.getItem('0'))
                 {
                     console.log('Customer props: ', customer.getCustomerProperties(), ' localStorage: ', localStorage.getItem((customer.getCustomerNumber()).toString()));
                     //alert('reset?');
