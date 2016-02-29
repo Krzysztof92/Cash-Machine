@@ -30,7 +30,7 @@
 
         start : 'insertCard',
         pin : 'pin',
-        access: 'welcome',
+        access : 'welcome',
         accountMenu : 'main-options',
         depositMenu : 'deposit-menu',
         statusMenu : 'status-menu',
@@ -446,9 +446,10 @@
 
 
 
-                localStorage.setItem((this.getCustomerNumber.call(defaultCustomer)).toString(), JSON.stringify(
-                    this.getCustomerProperties.call(defaultCustomer)
-                ));
+                localStorage.setItem(
+                    (this.getCustomerNumber.call(defaultCustomer)).toString(),
+                    JSON.stringify(this.getCustomerProperties.call(defaultCustomer))
+                );
 
                 /*localStorage.setItem('0', JSON.stringify({
                     name : 'Gość', //customer.name,
@@ -474,6 +475,8 @@
 
             else if (localStorage.length > 1)
             {
+                this.setCustomerProperties();
+
                 var availableAccounts = this.showAccountList('no');
 
                 //alert(availableAccounts);
@@ -609,12 +612,12 @@
             return obj;
         },
 
-        //// why/when to use??
+        //// sets Customer OBJ with values from localStorage
         setCustomerProperties : function(customerNumber)
         {
             ////console.log('\nBefore filling customer object from LS: ', this, ' LS: ', localStorage);
 
-            var num = customerNumber || (localStorage.length - 1).toString(); //,
+            var num = customerNumber || 0; /*(localStorage.length - 1).toString(); */ //,
                 /*obj = JSON.parse(localStorage.getItem(num));
             obj.number = Number(num);*/
 
@@ -710,7 +713,7 @@
 
         if (elem.id.indexOf(currentElem.slice(0, currentElem.indexOf('-'))) > -1)
         {
-            ////console.log('Current input: ', document.getElementById(currentElem).querySelector('[title]'));
+            console.log('Current input: ', document.getElementById(currentElem).querySelector('[title]'));
             return document.getElementById(currentElem).querySelector('[title]');
 
         }
@@ -772,6 +775,7 @@
             var slotListening = true,
                 pinDigitStatus = 0, //0 - disallowed, 1 - allowed
                 minimumPinLen = 4,
+                maximumPinLen = 8,
                 canCheckPin = false,
                 pinCount = 0,
                 maxPinCount = 3,
@@ -788,11 +792,11 @@
                     ////console.log('EV!: ', ev.target.innerHTML);
                     var pinInput = d.getElementsByClassName('typeDigits')[pinDigitStatus - 1];
                              //console.log('?pinCount: ', pinCount);
-                    if (ev.target.tagName.toUpperCase() !== 'DIV' && pinDigitStatus > 0 && Number(ev.target.innerHTML) >= 0)
+                    if (ev.target.tagName.toUpperCase() !== 'DIV' && pinDigitStatus > 0 && Number(ev.target.innerHTML) >= 0 && pinInput.value.length < maximumPinLen)
                     {
-                         pinInput.value += ev.target.innerHTML;
+                        pinInput.value += ev.target.innerHTML;
                         //console.log('pinInput: ', pinInput.value, '|| pressed: ', ev.target.innerHTML);
-                         if (pinInput.value.length >= minimumPinLen)
+                        if (pinInput.value.length >= minimumPinLen)
                         {
                             //canCheckPin = keyboardHandler(ev, digitStatus, minimumPinLen, pinInput);
                             //canCheckPin = checkPin(ev, minimumPinLen, pinInput);
@@ -812,7 +816,13 @@
                             }
                         }
                     }
-                    else if (canCheckPin === true)
+
+                    else if (ev.target.innerHTML === 'Anuluj')
+                    {
+                        clearInput();
+                    }
+
+                    else if (/*canCheckPin === true &&*/ pinInput.value.length >= minimumPinLen)
                     {
                         if (ev.target.innerHTML === 'OK')
                         {
@@ -822,7 +832,8 @@
                             ////console.log('[R]digitStatus?: ', digitStatus);
 
                             //console.log('after return: ',moneyDigitStatus);
-                            if (pinDigitStatus === 1) moneyDigitStatus = true;
+                            if (pinDigitStatus === 1)
+                                moneyDigitStatus = true;
                         }
                     }
                 }
@@ -832,55 +843,63 @@
 
                    /* to FIX => make sure of places when digits can be used  */
 
-                    var currentInput = checkElementInClass(); //'buttonLi', location.href.slice(location.href.indexOf('#')+1)); //'buttonLi', location.href.slice(location.href.indexOf('#')+1));
-
-                    if (ev.target.tagName.toUpperCase() !== 'DIV' && Number(ev.target.innerHTML) >= 0)
+                    if ((location.href.indexOf('status-menu') > -1) === false)
                     {
-                        //console.log('Current menu is: ', location.href.slice(location.href.indexOf('#')));
+                        var currentInput = checkElementInClass(); //'buttonLi', location.href.slice(location.href.indexOf('#')+1)); //'buttonLi', location.href.slice(location.href.indexOf('#')+1));
 
-                        //currentInput = checkElementInClass('buttonLi', location.href.slice(location.href.indexOf('#')+1));
-
-                        //console.log('Double? ', currentInput.value, ' || ', ev.target.innerHTML);
-
-                        currentInput.value += ev.target.innerHTML;
-
-                        if (currentInput.value.length > 1 && currentInput.value.length <= 4)
+                        if (ev.target.tagName.toUpperCase() !== 'DIV' && Number(ev.target.innerHTML) >= 0)
                         {
-                            canMoveMoney = true;
-                            //console.log('Try to move money...');
+                            //console.log('Current menu is: ', location.href.slice(location.href.indexOf('#')));
+
+                            //currentInput = checkElementInClass('buttonLi', location.href.slice(location.href.indexOf('#')+1));
+
+                            //console.log('Double? ', currentInput.value, ' || ', ev.target.innerHTML);
+
+                            currentInput.value += ev.target.innerHTML;
+
+                            if (currentInput.value.length > 1 && currentInput.value.length <= 4)
+                            {
+                                canMoveMoney = true;
+                                //console.log('Try to move money...');
+                            }
+
                         }
 
-                    }
-
-                    else if (ev.target.innerHTML === 'Del' && currentInput.value.length > 0)
-                    {
-                        //console.log('remove it?');
-                        currentInput.value = currentInput.value.slice(0, -1);
-                        if (currentInput.value.length <= 2)
-                            canMoveMoney = false;
-                    }
-
-                    else if (ev.target.innerHTML === 'OK' && canMoveMoney === true)
-                    {
-                        var operationSuccess = false;
-
-                        if (Number(currentInput.value) >= 50 && Number(currentInput.value) <= 4000)
+                        else if (ev.target.innerHTML === 'Del' && currentInput.value.length > 0)
                         {
-                            if (currentInput.title === 'deposit-cash')
-                                operationSuccess = customer.depositCustomerMoney(currentInput.value);
-                            else if (currentInput.title === 'withdraw-cash')
-                                operationSuccess = customer.withdrawCustomerMoney(currentInput.value);
-
-                            ////console.log('Current menu: ', currentInput);
-                            /*console.log('Money moved!!');*/
-
-                            if (operationSuccess)
-                                currentInput.value = '';
+                            //console.log('remove it?');
+                            currentInput.value = currentInput.value.slice(0, -1);
+                            if (currentInput.value.length <= 2)
+                                canMoveMoney = false;
                         }
-                        else if (Number(currentInput.value) < 50)
-                            alert('Minimalna kwota to 50 PLN!');
-                        else if (Number(currentInput.value) > 4000)
-                            alert('Maksymalna kwota to 4000 PLN!');
+
+                        else if (ev.target.innerHTML === 'OK' && canMoveMoney === true)
+                        {
+                            var operationSuccess = false;
+
+                            if (Number(currentInput.value) >= 50 && Number(currentInput.value) <= 4000)
+                            {
+                                if (currentInput.title === 'deposit-cash')
+                                    operationSuccess = customer.depositCustomerMoney(currentInput.value);
+                                else if (currentInput.title === 'withdraw-cash')
+                                    operationSuccess = customer.withdrawCustomerMoney(currentInput.value);
+
+                                ////console.log('Current menu: ', currentInput);
+                                /*console.log('Money moved!!');*/
+
+                                if (operationSuccess)
+                                    currentInput.value = '';
+                            }
+                            else if (Number(currentInput.value) < 50)
+                                alert('Minimalna kwota to 50 PLN!');
+                            else if (Number(currentInput.value) > 4000)
+                                alert('Maksymalna kwota to 4000 PLN!');
+                        }
+
+                        else if (ev.target.innerHTML === 'Anuluj')
+                        {
+                            clearInput();
+                        }
                     }
 
                 }
@@ -908,6 +927,12 @@
                 }
                 else alert('Nie wykryto żadnych zmian. Nie ma potrzeby zastosowania resetu danych.');
             }, false);
+
+            function clearInput()
+            {
+                var currentInput = checkElementInClass();
+                currentInput.value = '';
+            }
 
         }
         eventsHandling(document);
