@@ -573,15 +573,30 @@
             {
                 this.money -= Number(payOut);
                 showOrHide(document.getElementById('withdraw-menu').getElementsByClassName('hints')[0]);
+
+                var mS = document.getElementById('moneySlot');
+                mS.querySelector('input').value = payOut;
+                mS.classList.toggle('hover-state');
+
+
+                console.log('see?? ', mS.querySelector('input'));
+
                 return true;
             }
         },
 
         depositCustomerMoney : function(payIn)
         {
+            ////var payedIn = checkElementInClass(true);
 
             this.money += Number(payIn);
             console.log('Money type: >', typeof this.money, '< payIn ', typeof payIn);
+
+            showOrHide(document.getElementById('deposit-menu').getElementsByClassName('hints')[0]);
+
+            //document.getElementById('deposit-menu').getElementsByClassName('hints')[0].
+
+            ////payedIn.value = payIn;
 
             return true;
         },
@@ -696,7 +711,7 @@
     console.log('Default customer: ', customer.getCustomerProperties.call(defaultCustomer, true));
     console.log('Current customer: ', customer.getCustomerProperties(true)); // customer.getCustomerName(), ' ', customer.getCustomerPinCode(), ' ', customer.getCustomerAccountStatus());
 
-    function checkElementInClass() //elemClass, elemId) //elemClass, elemId)
+    function checkElementInClass(another) //elemClass, elemId) //elemClass, elemId)
     {
         // 'buttonLi', location.href.slice(location.href.indexOf('#')+1));
 
@@ -713,9 +728,17 @@
 
         if (elem.id.indexOf(currentElem.slice(0, currentElem.indexOf('-'))) > -1)
         {
-            console.log('Current input: ', document.getElementById(currentElem).querySelector('[title]'));
-            return document.getElementById(currentElem).querySelector('[title]');
+            if (another === true)
+            {
+                console.log('Another input: ', document.getElementById(currentElem).querySelectorAll('[title]')[1]);
+                return document.getElementById(currentElem).querySelectorAll('[title]')[1];
+            }
 
+            else
+            {
+                console.log('Current input: ', document.getElementById(currentElem).querySelector('[title]'));
+                return document.getElementById(currentElem).querySelector('[title]');
+            }
         }
 
         /*var elem = document.getElementsByClassName('buttonLi'),
@@ -912,6 +935,19 @@
                 slotsHandler(ev, intervalId, iC, s, cS, slotListening);
                 slotListening = false;
                 pinDigitStatus = 1;
+
+                /*if (ev.target.id === 'moneySlot')
+                {
+                    console.log('got');
+                    ev.target.classList.toggle('hover-state');
+                }*/
+
+                if (ev.target.value)
+                {
+                    ev.target.value = '';
+                    ev.target.parentNode.classList.toggle('hover-state');
+                }
+
             }, false);
 
             d.getElementById('resetButton').addEventListener('click', function(ev)
@@ -939,5 +975,13 @@
 
     }
     start();
+
+
+/*var wrapper = document.getElementById('moneySlot');
+wrapper.addEventListener('click', function(){
+
+    console.log('this: ', this);
+    ////this.classList.toggle('hover-state');
+});*/
 
 //}());

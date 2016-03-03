@@ -40,7 +40,7 @@
                     <div id="deposit-menu" class="sub-menus">
                         <p class="top">Kwota do wpłaty: <input class="typeDigits" title="deposit-cash" type="text" maxlength="4" value="" disabled></p>
 
-                        <p class="hints hide">Wpłacono: </p>
+                        <p class="hints hide">Wpłacono: <input class="checkValues" title="payedIn-cash" type="text" value="" disabled></p>
                     </div>
 
                     <div id="status-menu" class="sub-menus">
@@ -60,6 +60,16 @@
 
                         <p class="hints">???</p>
                     </div>
+
+                    <div id="money-result" class="sub-menus">
+                        <p class="top">
+                            <span class="hints" name="payedIn-cash">Wpłacono</span><span class="hints" name="payedOut-cash">Wypłacono</span>
+                            kwotę
+                            <input class="checkValues" title="payed-cash" type="text" value="" disabled>
+                        </p>
+                    </div>
+
+
                 </div> <!-- END of Main Menu screen -->
 
                 <div id="exit" class="main-menus">
@@ -109,7 +119,12 @@
 
             <div id="slots"> <!-- card slot -->
                 <button type="button" id="cardSlot">Karta</button>
-                <p id="moneySlot">:</p>
+                <!-- <p id="moneySlot">:</p> -->
+                <div id="moneySlot">
+                    <input type="text" id="money" value="" disabled>
+                    <div class="stripe"></div>
+                    <div class="stripe"></div>
+                </div>
             </div> <!-- END of card slot -->
 
             <div style="clear: both;"></div>
