@@ -80,11 +80,16 @@
 
         switch (screenName)
         {
-            case 'depositButton':  screensObj.moveTo('depositMenu');
-                            depositMoney();
+            case 'depositButton':
+                            menuStatus = 3;
+                            customer.prepareToDeposit();
+                            screensObj.moveTo('depositMenu');
+                            //depositMoney();
                             break;
-            case 'withdrawButton':  screensObj.moveTo('withdrawMenu');
-                            withdrawMoney();
+            case 'withdrawButton':
+                            menuStatus = 3;
+                            screensObj.moveTo('withdrawMenu');
+                            //withdrawMoney();
                             break;
             case 'checkAccountButton':
 
@@ -355,13 +360,10 @@
     };
 
 
-    depositMoney = function()
+    /*depositMoney = function()
     {
         ////console.log('[F]depositMoney?');
 
-
-
-        menuStatus = 3;
 
     };
 
@@ -369,9 +371,8 @@
     {
         ////console.log('[F]withdrawMoney?');
 
-        menuStatus = 3;
 
-    };
+    };*/
 
 
     // When "wyjdź" is pressed
@@ -579,10 +580,17 @@
                 mS.classList.toggle('hover-state');
 
 
-                console.log('see?? ', mS.querySelector('input'));
+                console.log('!moneyOUT ', mS.querySelector('input'));
 
                 return true;
             }
+        },
+
+        prepareToDeposit : function()
+        {
+            var mS = document.getElementById('moneySlot');
+            mS.querySelector('input').value = '';
+            mS.classList.toggle('hover-state');
         },
 
         depositCustomerMoney : function(payIn)
@@ -593,6 +601,12 @@
             console.log('Money type: >', typeof this.money, '< payIn ', typeof payIn);
 
             showOrHide(document.getElementById('deposit-menu').getElementsByClassName('hints')[0]);
+
+            ////
+            /*var mS = document.getElementById('moneySlot');
+            mS.querySelector('input').value = '1';
+            mS.classList.toggle('hover-state');*/
+            ////
 
             //document.getElementById('deposit-menu').getElementsByClassName('hints')[0].
 
@@ -946,6 +960,12 @@
                 {
                     ev.target.value = '';
                     ev.target.parentNode.classList.toggle('hover-state');
+
+                    setTimeout(function()
+                    {
+                        accountMenu();
+                        screensObj.moveTo('accountMenu');
+                    }, 625);
                 }
 
             }, false);
