@@ -8,7 +8,7 @@ body
 
 #container
 {
-    border: 2px solid yellow;
+    border: 2px solid orange;
 
     margin: 1% 2%; /* when READY, set "margin: 0 auto;" */
 
@@ -241,6 +241,85 @@ body
     margin-left: 2px;
 }
 
+#manage-accounts
+{
+    width: 130px;
+    position: absolute;
+    top: 0;
+    display: inline-block;
+    background: orange;
+    margin-left: 70px;
+    /*margin-top: 25px;*/
+
+    padding: 2px 6px 2px 2px;
+
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+#manage-accounts hr
+{
+    border-color: black;
+    margin-left: 2px;
+}
+
+#manage-accounts > :not(:first-child) + :not(:nth-child(2)) + :not(input)
+{
+    margin: 5px 0;
+}
+
+/*#manage-accounts input[type="radio"]:checked ~ #create-account
+{
+    display: none;
+}*/
+
+
+#manage-accounts label /*.options*/
+{
+    display: block;
+    color: black;
+    font-weight: bold;
+}
+
+#manage-accounts select
+{
+    width: 100%;
+    margin-top: 20px;
+
+    /*display:none;*/
+
+}
+
+#manage-accounts select option
+{
+    /*overflow: scroll;*/
+}
+
+#manage-accounts .user-data
+{
+    font-size: 14px;
+    color: black;
+    font-weight: bold;
+}
+
+#manage-accounts .enter-customer-data
+{
+    display: block;
+    width: 100%;
+}
+
+#submit-account
+{
+    position: relative;
+    left: 20px;
+    background: orange;
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+    border: 2px solid black;
+    border-radius: 25%;
+}
+
 #slots
 {
     position: absolute;
@@ -349,12 +428,12 @@ body
 }
 .stripe:first-of-type
 {
-    border-bottom: 1px solid green;
+    border-bottom: 1px dotted black;
     top: 0;
 }
 .stripe + .stripe
 {
-    border-top: 1px solid green;
+    border-top: 1px dotted black;
     bottom: 0;
 }
 

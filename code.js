@@ -5,21 +5,13 @@
     var originPath = location.href,
         screensObj,
         screenManipulation,
-        screenTracker,
         showOrHide,
         interfaceHandler,
-        keyboardHandler,
         slotsHandler,
         checkPin,
-        submitKey,
         menuStatus = 0,// 0 - when NOT in menu yet, 1 - when typing PIN, 2 - when in main-menu, 3 - when in sub-menu
-        screensArr = [],
         accountMenu,
         checkAccountStatus,
-        depositMoney,
-        withdrawMoney,
-        actionListener,
-        digitListener,
         blockCard,
         exit,
         resetAllData,
@@ -84,38 +76,18 @@
                             menuStatus = 3;
                             customer.prepareToDeposit();
                             screensObj.moveTo('depositMenu');
-                            //depositMoney();
                             break;
             case 'withdrawButton':
                             menuStatus = 3;
                             screensObj.moveTo('withdrawMenu');
-                            //withdrawMoney();
                             break;
             case 'checkAccountButton':
 
-                                    /*console.log('//// WTF?: ', [
-                                        document.getElementById('main-options').classList,
-                                        document.getElementById('status-menu').classList,
-                                        document.getElementById('status-menu').getElementsByClassName('top')[0].classList
-                                    ]);*/
-
-                                    //showOrHide(document.getElementById('main-menu').getElementsByClassName('top')[0]);
-
-                                    screensObj.moveTo('statusMenu');
-
-                                    /*showOrHide(document.getElementById('main-options')); //.style.display = 'none';
-                                    var statusMenu = document.getElementById('status-menu');
-                                    showOrHide(statusMenu); //.style.display = 'block';
-                                    var moneyStatus = statusMenu.getElementsByClassName('top')[0];
-                                    showOrHide(moneyStatus); //.style.display = 'block';*/
-
-                                    checkAccountStatus();
+                            screensObj.moveTo('statusMenu');
+                            checkAccountStatus();
                             break;
-            case 'cardInserted': ////showOrHide(document.getElementById('pin')); //.style.display = 'block';
-                            ////showOrHide(document.getElementById('pin').getElementsByClassName('hints')[0]); //.style.display = 'block';
+            case 'cardInserted':
                             screensObj.moveTo('pin');
-
-                                //checkPin();
                             break;
             case 'wrongPin': showOrHide(document.getElementById('pin').getElementsByClassName('hints')[0]); //.style.display = 'none';
                             showOrHide(document.getElementById('pin').getElementsByClassName('hints')[1]); //.style.display = 'block';
@@ -126,12 +98,6 @@
                             break;
             case 'main-options':
                             screensObj.moveTo('accountMenu');
-                            /*showOrHide(document.getElementById('main-options'), 'rwd'); //.style.display = 'flex';
-                            var mainOpts = document.getElementById('main-options').getElementsByClassName('hints');
-                            for (var i = 0; i < mainOpts.length; i++)
-                            {
-                                showOrHide(mainOpts[i], 'multi'); //.style.display = 'inline-block';
-                            }*/
                             break;
             case 'exitButton': exit();
                             break;
@@ -320,18 +286,12 @@
             screenManipulation('main-options');
         }
 
-
-        /*showOrHide(document.getElementById('start')); //.style.display = 'none';
-        showOrHide(document.getElementById('main-menu')); //.style.display = 'block';
-        showOrHide(document.getElementsByClassName('top')[1]); //.style.display = 'block';*/
-
         else
         {
             screensObj.moveTo('access');
 
             setTimeout(function ()
             {
-                //showOrHide(document.getElementsByClassName('top')[1]); //.style.display = 'none';
                 screenManipulation('main-options');
             }, 2000);
         }
@@ -358,21 +318,6 @@
         currentMoney.querySelector('[title]').value = currentMoneyStatus + currency;
 
     };
-
-
-    /*depositMoney = function()
-    {
-        ////console.log('[F]depositMoney?');
-
-
-    };
-
-    withdrawMoney = function()
-    {
-        ////console.log('[F]withdrawMoney?');
-
-
-    };*/
 
 
     // When "wyjdź" is pressed
@@ -408,6 +353,14 @@
                 clearIt.value = '';
             //}
             ////if (location.href.slice(location.href.indexOf('#')+1) !== 'status-menu' )
+            if (location.hash === '#withdraw-menu' || location.hash === '#deposit-menu')
+            {
+                console.log('EXIT from money: ', checkElementInClass('money'));
+                moneySlotShutters/*('money'); //*/(checkElementInClass('money'), 'close');
+
+            }
+            else console.log('NOT in MONEY menu!');
+
             accountMenu();
         }
     };
@@ -483,14 +436,6 @@
                 //alert(availableAccounts);
             }
 
-            /*for (var prop in this)
-            {
-                if (this.hasOwnProperty(prop))
-                {
-                    console.log('????: ', prop, ' / ', this, ' / ', this[prop]);
-                }
-            }*/
-
             ////
             /*var c = this.getCustomerProperties();
             console.log('C ', c);*/
@@ -557,9 +502,6 @@
 
         getCustomerAccountStatus : function()
         {
-            // this.saveCustomerMoney();
-            //this.getCustomerMethods();
-            // this.money = JSON.parse(localStorage.getItem(this.number.toString())).money = ;
             return this.money;
         },
 
@@ -646,32 +588,21 @@
         {
             ////console.log('\nBefore filling customer object from LS: ', this, ' LS: ', localStorage);
 
-            var num = customerNumber || 0; /*(localStorage.length - 1).toString(); */ //,
-                /*obj = JSON.parse(localStorage.getItem(num));
-            obj.number = Number(num);*/
+            var num = customerNumber || 0,
+                o = JSON.parse(localStorage.getItem(num));
 
+            //console.log('Num of customer in LS: ', num);
+            this.number = Number(num);
 
-            /*for (var prop in localStorage)
+            for (var key in o)
             {
-                if (localStorage.hasOwnProperty(prop))
+                if (o.hasOwnProperty(key))
                 {
-                    //if (typeof localStorage[prop] !== 'function' && prop != 'number')
-                    {
-                        */var o = JSON.parse(localStorage.getItem(num));
-                        //console.log('Num of customer in LS: ', num);
-                        this.number = Number(num);
-
-                        for (var key in o)
-                        {
-                            if (o.hasOwnProperty(key))
-                            {
-                                //console.log('From LS to customer: ', key, ' / ', o[key]);
-                                this[key] = o[key];
-                            }
-                        }
-                    /*}
+                    //console.log('From LS to customer: ', key, ' / ', o[key]);
+                    this[key] = o[key];
                 }
-            }*/
+            }
+
             ////console.log('\nAfter feeling ... : ', this);
         },
         ////////
@@ -683,21 +614,6 @@
             localStorage.setItem((this.number).toString(), JSON.stringify(this.getCustomerProperties()));
             console.log('Data stored!: ', localStorage.getItem(this.number));
 
-        },
-
-        saveCustomerMoney : function()
-        {
-            //console.log('Customer data in locaStorage: ', localStorage.getItem(this.number.toString()));
-
-            var obj = this.getCustomerProperties(true);
-            console.log('Exit OBJ: ', obj);
-
-            //localStorage.setItem(this.number.toString(), JSON.stringify(obj));
-
-            /*var obj = JSON.parse(localStorage.getItem(this.number.toString()));
-            obj.money = 666;
-            localStorage.setItem(this.number.toString(), JSON.stringify(obj));
-            console.log('Changed localStorage: ', localStorage);*/
         }
 
     };
@@ -710,7 +626,6 @@
         money : 12000
     };
 
-    ////defaultCustomer.getDefaultCustomerProperties = customer.getCustomerProperties;
 
     (function()
     {
@@ -718,25 +633,16 @@
     }());
 
 
-    /*var customerName = customer.getCustomerName(),
-        customerPin = customer.getCustomerPinCode(),
-        customerMoney = customer.getCustomerAccountStatus();*/
-
     console.log('Default customer: ', customer.getCustomerProperties.call(defaultCustomer, true));
     console.log('Current customer: ', customer.getCustomerProperties(true)); // customer.getCustomerName(), ' ', customer.getCustomerPinCode(), ' ', customer.getCustomerAccountStatus());
 
     function checkElementInClass(another) //elemClass, elemId) //elemClass, elemId)
     {
-        // 'buttonLi', location.href.slice(location.href.indexOf('#')+1));
-
         var elemId = location.href.slice(location.href.indexOf('#')+1),
             elem = document.getElementById(elemId),
             currentElem = screensObj.getProperties(elemId);
 
-        //last version
-        /*var elem = document.getElementsByCla
-        ssName(elemClass),
-         currentElem = screensObj.getProperties(elemId);*/
+        console.log('another param: ', another);
 
         ////console.log('elem: ', elem, /*' elemClass: ', elemClass, */' currentElem: ', currentElem, ' elemId: ', elemId);
 
@@ -748,6 +654,12 @@
                 return document.getElementById(currentElem).querySelectorAll('[title]')[1];
             }
 
+            else if (another === 'money')
+            {
+                console.log('Money input: ', document.getElementById(another));
+                return document.getElementById(another);
+            }
+
             else
             {
                 console.log('Current input: ', document.getElementById(currentElem).querySelector('[title]'));
@@ -755,21 +667,6 @@
             }
         }
 
-        /*var elem = document.getElementsByClassName('buttonLi'),
-            currentElem = screensObj.getProperties(elemId); //location.href.slice(location.href.indexOf('#')+1));*/
-
-        /*for (var i = 0, el = elem.length; i < el; i++)
-        {
-            console.log('ID / id: ', elem[i].id, ' || ', elemId);
-
-            if (elem[i].id.indexOf(currentElem.slice(0, currentElem.indexOf('-'))) > -1)
-            {
-                //console.log('Current input: ', document.getElementById(currentElem).querySelector('[title]'));
-                return document.getElementById(currentElem).querySelector('[title]');
-
-            }
-
-        }*/
     }
 
     // Site start
@@ -781,9 +678,6 @@
             s = document.getElementById('start'),
             cS = document.getElementById('cardSlot');
 
-        /*iC.style.display = 'block';
-
-        s.style.display = 'block';*/
 
         cS.style.color = 'green';
         cS.style.background = 'white';
@@ -805,7 +699,7 @@
 
         }, 1000);
 
-        var correctPin = Number(customer.getCustomerPinCode()); // 1234; ////Number(owner.getOwnerPinCode());
+        var correctPin = Number(customer.getCustomerPinCode()); // 1234;
 
         function eventsHandling(d)
         {
@@ -835,8 +729,6 @@
                         //console.log('pinInput: ', pinInput.value, '|| pressed: ', ev.target.innerHTML);
                         if (pinInput.value.length >= minimumPinLen)
                         {
-                            //canCheckPin = keyboardHandler(ev, digitStatus, minimumPinLen, pinInput);
-                            //canCheckPin = checkPin(ev, minimumPinLen, pinInput);
                              canCheckPin = true;
                         }
                     }
@@ -930,11 +822,11 @@
                         {
                             var operationSuccess = false;
 
-                            console.log('???? ', currentInput.value, ' typo: ', typeof Number(currentInput.value));
+                            //console.log('???? ', currentInput.value, ' typo: ', typeof Number(currentInput.value));
 
                             if (Number(currentInput.value) >= 50 && Number(currentInput.value) <= 4000)
                             {
-                                console.log('currentInput ', currentInput);
+                                //console.log('currentInput ', currentInput);
 
                                 if (currentInput.title === 'deposit-cash' || currentInput.title === 'money-slot')
                                     operationSuccess = customer.depositCustomerMoney(currentInput.value);
@@ -942,7 +834,7 @@
                                     operationSuccess = customer.withdrawCustomerMoney(currentInput.value);
 
                                 ////console.log('Current menu: ', currentInput);
-                                console.log('Money moved!!');
+                                //console.log('Money moved!!');
 
                                 if (operationSuccess)
                                 {
@@ -952,7 +844,7 @@
 
                                         //currentInput.parentNode.classList.toggle('hover-state');
 
-                                    console.log('cleaned?');
+                                    //console.log('cleaned?');
                                 }
 
                                 //else console.log('not success?');
@@ -962,18 +854,15 @@
                             else if (Number(currentInput.value) > 4000)
                                 alert('Maksymalna kwota to 4000 PLN!');
 
-                            else console.log('wtf??: )', currentInput.value, ' typo: ', typeof currentInput.value);
                         }
 
                         else if (ev.target.innerHTML === 'Anuluj')
                         {
-                            clearInput();
+                            console.log('Cancel?');
+                            location.hash === '#withdraw-menu' ? clearInput() : clearInput('money');
                         }
 
-                        else console.log('//wtf??: )', currentInput.value, ' typo: ', typeof currentInput.value);
                     }
-
-                    else console.log('//|| wtf??: )', currentInput.value, ' typo: ', typeof currentInput.value);
 
                 }
 
@@ -986,22 +875,10 @@
                 slotListening = false;
                 pinDigitStatus = 1;
 
-                /*if (ev.target.id === 'moneySlot')
-                {
-                    console.log('got');
-                    ev.target.classList.toggle('hover-state');
-                }*/
-
                 if (ev.target.value)
                 {
                     ev.target.value = '';
-                    moneySlotShutters(ev.target); /*ev.target.parentNode.classList.toggle('hover-state');
-
-                    setTimeout(function()
-                    {
-                        accountMenu();
-                        screensObj.moveTo('accountMenu');
-                    }, 575);*/
+                    moneySlotShutters(ev.target);
                 }
 
             }, false);
@@ -1010,8 +887,6 @@
             {
                 if (JSON.stringify(customer.getCustomerProperties.call(defaultCustomer, true)) !== JSON.stringify(customer.getCustomerProperties(true))
                         ||  localStorage.length > 1)
-                //if (JSON.stringify(defaultCustomer.getDefaultCustomerProperties(true)) !== JSON.stringify(customer.getCustomerProperties(true)))
-                //if (JSON.stringify(customer.getCustomerProperties()) != localStorage.getItem('0'))
                 {
                     console.log('Customer props: ', customer.getCustomerProperties(), ' localStorage: ', localStorage.getItem((customer.getCustomerNumber()).toString()));
                     //alert('reset?');
@@ -1020,22 +895,33 @@
                 else alert('Nie wykryto żadnych zmian. Nie ma potrzeby zastosowania resetu danych.');
             }, false);
 
-            function clearInput()
-            {
-                var input = checkElementInClass();
-                input.value = '';
-            }
 
-            function moneySlotShutters(target)
+            d.getElementById('manage-accounts').addEventListener('change', function(ev)
             {
-                //console.log('target?: ', target);
-                target.parentNode.classList.toggle('hover-state');
+                ////console.log('RADIO ', ev.target);
 
-                setTimeout(function()
+                if (ev.target.type === 'radio')
                 {
-                    accountMenu();
-                    screensObj.moveTo('accountMenu');
-                }, 575);
+                    if (ev.target.value === 'createAccount')
+                    {
+                        ev.target.parentNode.parentNode.querySelector('#create-account').classList.remove('hide');
+                        ev.target.parentNode.parentNode.querySelector('#list-of-accounts').classList.add('hide');
+                    }
+
+                    else
+                    {
+                        //console.log('2nd radio: ', ev.target.parentNode.parentNode.querySelector('#list-of-accounts'));
+                        ev.target.parentNode.parentNode.querySelector('#create-account').classList.add('hide');
+                        ev.target.parentNode.parentNode.querySelector('#list-of-accounts').classList.remove('hide');
+                    }
+                }
+
+            }, false);
+
+            function clearInput(param)
+            {
+                var input = checkElementInClass(param);
+                input.value = '';
             }
 
         }
@@ -1045,11 +931,20 @@
     start();
 
 
-/*var wrapper = document.getElementById('moneySlot');
-wrapper.addEventListener('click', function(){
+    function moneySlotShutters(target, openOrClose)
+    {
+        //console.log('target?: ', target);
+        if (openOrClose === 'close' && target.parentNode.classList.contains('hover-state'))
+            target.parentNode.classList.remove('hover-state');
 
-    console.log('this: ', this);
-    ////this.classList.toggle('hover-state');
-});*/
+        else target.parentNode.classList.toggle('hover-state');
+
+        setTimeout(function()
+        {
+            accountMenu();
+            screensObj.moveTo('accountMenu');
+        }, 575);
+    }
+
 
 //}());

@@ -52,7 +52,7 @@
                     <div id="withdraw-menu" class="sub-menus">
                         <p class="top">Kwota do wypłaty: <input class="typeDigits" title="withdraw-cash" type="text" maxlength="4" value="" disabled></p>
 
-                        <p class="hints hide">Wypłacono: <input class="checkValues" title="payedOut-cash" type="text" value="" disabled></p>
+                        <p class="hints hide">Odbierz <input class="checkValues" title="payedOut-cash" type="text" value="" disabled> ze slotu</p>
                     </div>
 
                     <div id="settings-menu" class="sub-menus">
@@ -111,11 +111,36 @@
 
                 <div style="clear: both;"></div>
 
-                <div><button type="submit" id="keyOk">OK</button></div>
-                <div><button type="submit" id="keyCancel">Anuluj</button></div>
+                <div><button type="button" id="keyOk">OK</button></div>
+                <div><button type="button" id="keyCancel">Anuluj</button></div>
             </div> <!-- END of keyboard -->
 
-            <button id="resetButton"><p>reset</p></button>
+            <form id="manage-accounts">
+
+                <label class="options"><input type="radio" name="choose-option" value="chooseAccount" checked>Wybierz konto</label>
+                <label class="options"><input type="radio" name="choose-option" value="createAccount">Stwórz konto</label>
+                <!-- <label><input type="radio" name="choose-option" value="usunKonto">Usuń konto</label> -->
+
+                <hr>
+
+                <select id="list-of-accounts" title="listOfAccounts">
+                    <option>Gość</option>
+                    <option>...</option>
+                </select>
+
+                <div id="create-account" class="hide">
+                    <label for="user-name" class="user-data">Wprowadź imię: </label>
+                    <input type="text" class="enter-customer-data" id="user-name" placeholder="Imię">
+
+                    <label for="user-pin" class="user-data">Wprowadź kod PIN: </label>
+                    <input type="text" class="enter-customer-data" id="user-pin" placeholder="Kod PIN">
+                </div>
+
+                <button type="button" id="submit-account">Zatwierdź</button>
+
+            </form>
+
+            <button type="button" id="resetButton"><p>reset</p></button>
 
             <div id="slots"> <!-- card slot -->
                 <button type="button" id="cardSlot">Karta</button>
