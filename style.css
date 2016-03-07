@@ -323,7 +323,8 @@ body
     text-align: center;
 }*/
 
-#moneySlot {
+#moneySlot
+{
     width: 75px;
     height: 20px;
     border: 2px solid black;
@@ -334,31 +335,36 @@ body
     cursor: text;
     display: block;
 }
-.stripe {
+.stripe
+{
     position: absolute;
     width: 100%;
     height: 50%;
-    background: #00C217; /*#81848F;*/
+    background: #005BFF; /* blue; /*#00C217; /*#81848F;*/
     z-index: 1;
-    transition: height 500ms ease-in;
+    transition: height 250ms ease-in-out;
     /*transition:height 100ms ease-out;*/
 
     /*opacity: 0.3;*/
 }
-.stripe:first-of-type {
-    border-bottom: 1px solid transparent;
+.stripe:first-of-type
+{
+    border-bottom: 1px solid green;
     top: 0;
 }
-.stripe + .stripe {
-    border-top: 1px solid transparent;
+.stripe + .stripe
+{
+    border-top: 1px solid green;
     bottom: 0;
 }
 
 #moneySlot.hover-state .stripe, input:focus ~ .stripe {
     height: 0;
+    transition: height 500ms ease-in-out;
 }
 
-#money {
+#money
+{
     position: absolute;
     top: 0;
     bottom: 0;
@@ -372,12 +378,13 @@ body
     height: 1.2em;
     /*line-height: 1.2em;*/
     outline: none !important;
-    border: none;
+    /*border: none;*/
     background: black; /*transparent;*/
     color: white;
     font-size: 12px;
     font-weight: bold;
     text-decoration: underline;
+    border: 1px solid green;
 }
 
 #money:hover
