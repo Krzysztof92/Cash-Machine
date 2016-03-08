@@ -614,6 +614,57 @@
             localStorage.setItem((this.number).toString(), JSON.stringify(this.getCustomerProperties()));
             console.log('Data stored!: ', localStorage.getItem(this.number));
 
+        },
+
+        addCustomer : function(name, pin)
+        {
+            var customerExists = false;
+
+            for (var customer in localStorage)
+            {
+                if (localStorage.hasOwnProperty(customer))
+                {
+                    var storageObj = JSON.parse(localStorage[customer]);
+
+                    //console.log(storageObj);
+
+                    for (var prop in storageObj)
+                    {
+                        if (storageObj.hasOwnProperty(prop))
+                        {
+                            //console.log(prop, ': ', storageObj[prop]);
+
+                            if (name === storageObj[prop])
+                            {
+                                console.log(name, ' <> ', storageObj[prop]);
+                                customerExists = true;
+
+                                return false;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            if (!customerExists)
+            {
+
+                //console.log('No such account in localStorage');
+                //console.log('localStorage.length: ', localStorage.length);
+
+                localStorage.setItem((localStorage.length).toString(), JSON.stringify({
+                    name: name,
+                    pin: pin,
+                    money: 0
+                }));
+
+                console.log('Added customer: ', localStorage.getItem((localStorage.length - 1).toString()));
+
+                return true;
+
+            }
+
         }
 
     };
@@ -950,7 +1001,14 @@
                                         console.log('PIN is too LONG! Maximum 8 digits');
                                     }
 
-                                    else console.log('Imie: ', name, '\nPIN: ', pin);
+                                    else
+                                    {
+                                        //console.log('Imie: ', name, '\nPIN: ', pin);
+
+                                        var createdCustomer = customer.addCustomer(name, pin);
+
+                                        console.log('Is new customer?: ', createdCustomer);
+                                    }
                                 }
 
                                 else if (/^[A-ZĄĆĘŁŃÓŻŹ][a-ząęśćńółżź]+$/.test(name) && !Number(pin))
