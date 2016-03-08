@@ -1,21 +1,38 @@
 body
 {
-    background-color: #81848F;
+    background-color: #AE6717;
     margin: 0 auto;
     font-weight: bold;
 
 }
 
+#machine
+{
+    width: 520px;
+    height: 350px;
+    border: 10px solid #00637A;
+    border-radius: 12%;
+    margin: 85px auto;
+    background: #00637A;
+
+
+}
+
 #container
 {
-    border: 2px solid orange;
+    position: relative;
+    top: 12px;
 
-    margin: 1% 2%; /* when READY, set "margin: 0 auto;" */
-
-    /*padding-left: 2%;*/
     height: 325px;
     width: 500px;
-    position: absolute;
+    margin: 0 auto;
+
+    /*border: 2px solid orange;*/
+    border-radius: 5%;
+
+    /*margin: 1% 2%;*/
+
+    background-color: #81848F;
 }
 
 #interface

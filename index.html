@@ -8,154 +8,156 @@
 </head>
 
 <body>
-    <div id="container"> <!-- Main Container -->
-        <div id="interface"> <!-- interface -->
+    <div id="machine">
+        <div id="container"> <!-- Main Container -->
+            <div id="interface"> <!-- interface -->
 
-            <div id="buttonL"> <!-- left buttons -->
-                <div><button type="button" class="buttonLi" id="depositButton">Wpłata</button></div>
-                <div><button type="button" class="buttonLi" id="withdrawButton">Wypłata</button></div>
-            </div>   <!-- END of left buttons -->
+                <div id="buttonL"> <!-- left buttons -->
+                    <div><button type="button" class="buttonLi" id="depositButton">Wpłata</button></div>
+                    <div><button type="button" class="buttonLi" id="withdrawButton">Wypłata</button></div>
+                </div>   <!-- END of left buttons -->
 
-            <div id="screen"> <!-- SCREEN -->
-                <div id="start" class="main-menus"> <!-- Start screen -->
-                    <p id="insertCard" class="top">Włóż kartę do czytnika.</p>
+                <div id="screen"> <!-- SCREEN -->
+                    <div id="start" class="main-menus"> <!-- Start screen -->
+                        <p id="insertCard" class="top">Włóż kartę do czytnika.</p>
 
-                    <div id="pin" class="sub-menus">
-                        <p id="typePin" class="hints">Wprowadź kod PIN: <input class="typeDigits" title="pin" type="text" maxlength="8" value="" disabled></p>
-                        <p id="wrongPin" class="hints hide">Błędny kod PIN! <br> Wpisz kod PIN ponownie: <input class="typeDigits" title="fixPin" type="text" maxlength="8" value="" disabled><br> Pozostało prób: </p>
-                        <p id="blocked" class="hints hide">Przekroczono limit prób - blokada!</p>
+                        <div id="pin" class="sub-menus">
+                            <p id="typePin" class="hints">Wprowadź kod PIN: <input class="typeDigits" title="pin" type="text" maxlength="8" value="" disabled></p>
+                            <p id="wrongPin" class="hints hide">Błędny kod PIN! <br> Wpisz kod PIN ponownie: <input class="typeDigits" title="fixPin" type="text" maxlength="8" value="" disabled><br> Pozostało prób: </p>
+                            <p id="blocked" class="hints hide">Przekroczono limit prób - blokada!</p>
+                        </div>
+                    </div> <!-- END of Start screen -->
+
+                    <div id="main-menu" class="main-menus"> <!-- Main Menu screen -->
+                        <p id="welcome" class="top">Witamy w banku!</p>
+
+                        <div id="main-options" class="sub-menus">
+                            <p id="payIn" class="hints">Wpłać</p>
+                            <p id="accountStatus" class="hints">Sprawdź stan konta</p>
+                            <p id="payOut" class="hints">Wypłac</p>
+                            <p id="quit" class="hints">Wyjście</p>
+                        </div>
+
+                        <div id="deposit-menu" class="sub-menus">
+                            <p class="top">Kwota do wpłaty: <input class="typeDigits" title="deposit-cash" type="text" maxlength="4" value="" disabled></p>
+
+                            <p class="hints hide">Wpłacono: <input class="checkValues" title="payedIn-cash" type="text" value="" disabled></p>
+                        </div>
+
+                        <div id="status-menu" class="sub-menus">
+                            <p class="top">Twój aktualny stan konta: <input class="checkValues" title="check-cash" type="text" value="" disabled></p>
+
+                            <p class="hints hide">???</p>
+                        </div>
+
+                        <div id="withdraw-menu" class="sub-menus">
+                            <p class="top">Kwota do wypłaty: <input class="typeDigits" title="withdraw-cash" type="text" maxlength="4" value="" disabled></p>
+
+                            <p class="hints hide">Odbierz <input class="checkValues" title="payedOut-cash" type="text" value="" disabled> ze slotu</p>
+                        </div>
+
+                        <div id="settings-menu" class="sub-menus">
+                            <p class="top">Ustawienia</p>
+
+                            <p class="hints">???</p>
+                        </div>
+
+                        <div id="money-result" class="sub-menus">
+                            <p class="top">
+                                <span class="hints" name="payedIn-cash">Wpłacono</span><span class="hints" name="payedOut-cash">Wypłacono</span>
+                                kwotę
+                                <input class="checkValues" title="payed-cash" type="text" value="" disabled>
+                            </p>
+                        </div>
+
+
+                    </div> <!-- END of Main Menu screen -->
+
+                    <div id="exit" class="main-menus">
+                        <p id="see-you" class="top">Have a nice day and see You again!</p>
                     </div>
-                </div> <!-- END of Start screen -->
+                </div> <!-- END of SCREEN -->
 
-                <div id="main-menu" class="main-menus"> <!-- Main Menu screen -->
-                    <p id="welcome" class="top">Witamy w banku!</p>
+                <div id="buttonR"> <!-- right buttons -->
+                    <div><button type="button" class="buttonRi" id="checkAccountButton">Stan konta</button></div>
+                    <div><button type="button" class="buttonRi" id="exitButton">Wyjdź</button></div>
+                </div>  <!-- END of  right buttons -->
 
-                    <div id="main-options" class="sub-menus">
-                        <p id="payIn" class="hints">Wpłać</p>
-                        <p id="accountStatus" class="hints">Sprawdź stan konta</p>
-                        <p id="payOut" class="hints">Wypłac</p>
-                        <p id="quit" class="hints">Wyjście</p>
+            </div> <!-- END of interface -->
+
+            <!--<div style="clear: both;"></div>-->
+
+            <div id="keyboard-and-slots">
+                <div id="keyboard"> <!-- keyboard -->
+                    <div><button type="button" class="numKey" id="key1">1</button></div>
+                    <div><button type="button" class="numKey" id="key2">2</button></div>
+                    <div><button type="button" class="numKey" id="key3">3</button></div>
+
+                    <div style="clear: both;"></div>
+
+                    <div><button type="button" class="numKey" id="key4">4</button></div>
+                    <div><button type="button" class="numKey" id="key5">5</button></div>
+                    <div><button type="button" class="numKey" id="key6">6</button></div>
+
+                    <div style="clear: both;"></div>
+
+                    <div><button type="button" class="numKey" id="key7">7</button></div>
+                    <div><button type="button" class="numKey" id="key8">8</button></div>
+                    <div><button type="button" class="numKey" id="key9">9</button></div>
+
+                    <div style="clear: both;"></div>
+
+                    <div><button type="button" class="numKey" id="key0">0</button></div>
+                    <div><button type="button" id="keyDelete">Del</button></div>
+
+                    <div style="clear: both;"></div>
+
+                    <div><button type="button" id="keyOk">OK</button></div>
+                    <div><button type="button" id="keyCancel">Anuluj</button></div>
+                </div> <!-- END of keyboard -->
+
+                <form id="manage-accounts">
+
+                    <label class="options"><input type="radio" name="choose-option" value="chooseAccount" checked>Wybierz konto</label>
+                    <label class="options"><input type="radio" name="choose-option" value="createAccount">Stwórz konto</label>
+                    <!-- <label><input type="radio" name="choose-option" value="usunKonto">Usuń konto</label> -->
+
+                    <hr>
+
+                    <select id="list-of-accounts" title="listOfAccounts">
+                        <option>Gość</option>
+                    </select>
+
+                    <div id="create-account" class="hide">
+                        <label for="user-name" class="user-data">Wprowadź imię: </label>
+                        <input type="text" class="enter-customer-data" id="user-name" placeholder="np. Józef">
+
+                        <label for="user-pin" class="user-data">Wprowadź kod PIN: </label>
+                        <input type="text" class="enter-customer-data" id="user-pin" placeholder="np. 2016">
                     </div>
 
-                    <div id="deposit-menu" class="sub-menus">
-                        <p class="top">Kwota do wpłaty: <input class="typeDigits" title="deposit-cash" type="text" maxlength="4" value="" disabled></p>
+                    <button type="button" id="submit-account" class="only">Zatwierdź</button>
+                    <button type="button" id="delete-account">Usuń</button>
 
-                        <p class="hints hide">Wpłacono: <input class="checkValues" title="payedIn-cash" type="text" value="" disabled></p>
+                </form>
+
+                <button type="button" id="resetButton"><p>reset</p></button>
+
+                <div id="slots"> <!-- card slot -->
+                    <button type="button" id="cardSlot">Karta</button>
+                    <!-- <p id="moneySlot">:</p> -->
+                    <div id="moneySlot">
+                        <input type="text" id="money" title="money-slot" class="take-money" value="" disabled>
+                        <div class="stripe"></div>
+                        <div class="stripe"></div>
                     </div>
-
-                    <div id="status-menu" class="sub-menus">
-                        <p class="top">Twój aktualny stan konta: <input class="checkValues" title="check-cash" type="text" value="" disabled></p>
-
-                        <p class="hints hide">???</p>
-                    </div>
-
-                    <div id="withdraw-menu" class="sub-menus">
-                        <p class="top">Kwota do wypłaty: <input class="typeDigits" title="withdraw-cash" type="text" maxlength="4" value="" disabled></p>
-
-                        <p class="hints hide">Odbierz <input class="checkValues" title="payedOut-cash" type="text" value="" disabled> ze slotu</p>
-                    </div>
-
-                    <div id="settings-menu" class="sub-menus">
-                        <p class="top">Ustawienia</p>
-
-                        <p class="hints">???</p>
-                    </div>
-
-                    <div id="money-result" class="sub-menus">
-                        <p class="top">
-                            <span class="hints" name="payedIn-cash">Wpłacono</span><span class="hints" name="payedOut-cash">Wypłacono</span>
-                            kwotę
-                            <input class="checkValues" title="payed-cash" type="text" value="" disabled>
-                        </p>
-                    </div>
-
-
-                </div> <!-- END of Main Menu screen -->
-
-                <div id="exit" class="main-menus">
-                    <p id="see-you" class="top">Have a nice day and see You again!</p>
-                </div>
-            </div> <!-- END of SCREEN -->
-
-            <div id="buttonR"> <!-- right buttons -->
-                <div><button type="button" class="buttonRi" id="checkAccountButton">Stan konta</button></div>
-                <div><button type="button" class="buttonRi" id="exitButton">Wyjdź</button></div>
-            </div>  <!-- END of  right buttons -->
-
-        </div> <!-- END of interface -->
-
-        <!--<div style="clear: both;"></div>-->
-
-        <div id="keyboard-and-slots">
-            <div id="keyboard"> <!-- keyboard -->
-                <div><button type="button" class="numKey" id="key1">1</button></div>
-                <div><button type="button" class="numKey" id="key2">2</button></div>
-                <div><button type="button" class="numKey" id="key3">3</button></div>
+                </div> <!-- END of card slot -->
 
                 <div style="clear: both;"></div>
+            </div>
 
-                <div><button type="button" class="numKey" id="key4">4</button></div>
-                <div><button type="button" class="numKey" id="key5">5</button></div>
-                <div><button type="button" class="numKey" id="key6">6</button></div>
-
-                <div style="clear: both;"></div>
-
-                <div><button type="button" class="numKey" id="key7">7</button></div>
-                <div><button type="button" class="numKey" id="key8">8</button></div>
-                <div><button type="button" class="numKey" id="key9">9</button></div>
-
-                <div style="clear: both;"></div>
-
-                <div><button type="button" class="numKey" id="key0">0</button></div>
-                <div><button type="button" id="keyDelete">Del</button></div>
-
-                <div style="clear: both;"></div>
-
-                <div><button type="button" id="keyOk">OK</button></div>
-                <div><button type="button" id="keyCancel">Anuluj</button></div>
-            </div> <!-- END of keyboard -->
-
-            <form id="manage-accounts">
-
-                <label class="options"><input type="radio" name="choose-option" value="chooseAccount" checked>Wybierz konto</label>
-                <label class="options"><input type="radio" name="choose-option" value="createAccount">Stwórz konto</label>
-                <!-- <label><input type="radio" name="choose-option" value="usunKonto">Usuń konto</label> -->
-
-                <hr>
-
-                <select id="list-of-accounts" title="listOfAccounts">
-                    <option>Gość</option>
-                </select>
-
-                <div id="create-account" class="hide">
-                    <label for="user-name" class="user-data">Wprowadź imię: </label>
-                    <input type="text" class="enter-customer-data" id="user-name" placeholder="np. Józef">
-
-                    <label for="user-pin" class="user-data">Wprowadź kod PIN: </label>
-                    <input type="text" class="enter-customer-data" id="user-pin" placeholder="np. 2016">
-                </div>
-
-                <button type="button" id="submit-account" class="only">Zatwierdź</button>
-                <button type="button" id="delete-account">Usuń</button>
-
-            </form>
-
-            <button type="button" id="resetButton"><p>reset</p></button>
-
-            <div id="slots"> <!-- card slot -->
-                <button type="button" id="cardSlot">Karta</button>
-                <!-- <p id="moneySlot">:</p> -->
-                <div id="moneySlot">
-                    <input type="text" id="money" title="money-slot" class="take-money" value="" disabled>
-                    <div class="stripe"></div>
-                    <div class="stripe"></div>
-                </div>
-            </div> <!-- END of card slot -->
-
-            <div style="clear: both;"></div>
-        </div>
-
-    </div> <!-- END OF Main Container -->
+        </div> <!-- END OF Main Container -->
+    </div>
 
 <script type="text/javascript" src="code.js"></script>
 </body>
