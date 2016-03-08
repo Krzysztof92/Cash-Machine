@@ -1,5 +1,5 @@
-//(function ()
-//{
+(function (doc)
+{
 
     // Variables for function expressions
     var originPath = location.href,
@@ -419,13 +419,13 @@
 
             }
 
-            else if (localStorage.getItem('0') && localStorage.length === 1)
+            /*else if (localStorage.getItem('0') && localStorage.length === 1)
             {
                 alert('Konto gościa jest aktywne. Zaloguj się na nie lub utwórz swoje konto.' + this.showAccountList());
 
                 this.setCustomerProperties();
 
-            }
+            }*/
 
             else if (localStorage.length > 1)
             {
@@ -731,7 +731,7 @@
 
     (function()
     {
-        ////customer.loadAccount();
+        customer.loadAccount();
         customer.makeListOfAccounts();
     }());
 
@@ -786,21 +786,7 @@
         cS.style.background = 'white';
 
         var intervalId = 0;
-        intervalId = setInterval(function()
-        {
-            if (cS.style.color === 'green')
-            {
-                cS.style.color = 'white';
-                cS.style.background = 'green';
-            }
 
-            else
-            {
-                cS.style.color = 'green';
-                cS.style.background = 'white';
-            }
-
-        }, 1000);
 
 
         function eventsHandling(d)
@@ -817,192 +803,8 @@
                 canMoveMoney = false,
                 accountManageMode = true;
 
-            d.getElementById('interface').addEventListener('click', interfaceHandler, false);
-            d.getElementById('keyboard').addEventListener('click', function(ev)
-            {
-                var correctPin = Number(customer.getCustomerPinCode()); // 1234;
-                console.log('====CorrectPIN: ', correctPin);
 
-
-                if (!moneyDigitStatus)
-                {
-                    ////console.log('EV!: ', ev.target.innerHTML);
-                    var pinInput = d.getElementsByClassName('typeDigits')[pinDigitStatus - 1];
-                             //console.log('?pinCount: ', pinCount);
-                    if (ev.target.tagName.toUpperCase() !== 'DIV' && pinDigitStatus > 0 && Number(ev.target.innerHTML) >= 0 && pinInput.value.length < maximumPinLen)
-                    {
-                        pinInput.value += ev.target.innerHTML;
-                        //console.log('pinInput: ', pinInput.value, '|| pressed: ', ev.target.innerHTML);
-                        if (pinInput.value.length >= minimumPinLen)
-                        {
-                             canCheckPin = true;
-                        }
-                    }
-                    else if (ev.target.innerHTML === 'Del' && pinDigitStatus > 0)
-                    {
-                        //console.log('del');
-                        if (pinInput.value.length)
-                        {
-                            //console.log('delete...', pinInput.value[pinInput.value.length-1]);
-                            pinInput.value = pinInput.value.slice(0, -1);
-                            if (pinInput.value.length < minimumPinLen)
-                            {
-                                canCheckPin = false;
-                            }
-                        }
-                    }
-
-                    else if (ev.target.innerHTML === 'Anuluj')
-                    {
-                        clearInput();
-                    }
-
-                    else if (/*canCheckPin === true &&*/ pinInput.value.length >= minimumPinLen)
-                    {
-                        if (ev.target.innerHTML === 'OK')
-                        {
-                            pinCount++;
-                            //console.log('If >= 4 i can check: ', pinInput.value.length);
-                            pinDigitStatus = checkPin(ev, pinInput, correctPin, pinCount, maxPinCount, failCount);
-                            ////console.log('[R]digitStatus?: ', digitStatus);
-
-                            //console.log('after return: ',moneyDigitStatus);
-                            if (pinDigitStatus === 1)
-                                moneyDigitStatus = true;
-                        }
-                    }
-                }
-
-                else
-                {
-
-                   /* to FIX => make sure of places when digits can be used  */
-
-                    if ((location.href.indexOf('status-menu') > -1) === false)
-                    {
-                        var //screenInput = '', // = checkElementInClass(), //'buttonLi', location.href.slice(location.href.indexOf('#')+1)); //'buttonLi', location.href.slice(location.href.indexOf('#')+1));
-                            //moneyInput = '', //document.getElementById('moneySlot').querySelector('input'),
-                            currentInput;
-
-                        location.hash.indexOf('deposit-menu') > -1 ? currentInput = document.getElementById('moneySlot').querySelector('input') : currentInput = checkElementInClass();
-
-                        if (ev.target.tagName.toUpperCase() !== 'DIV' && Number(ev.target.innerHTML) >= 0)
-                        {
-                            //console.log('Current menu is: ', location.href.slice(location.href.indexOf('#')));
-
-                            //currentInput = checkElementInClass('buttonLi', location.href.slice(location.href.indexOf('#')+1));
-
-                            //console.log('Double? ', currentInput.value, ' || ', ev.target.innerHTML);
-
-                            /*if (location.hash.indexOf('deposit-menu') > -1)
-                            {
-
-
-                                currentInput = document.getElementById('moneySlot').querySelector('input'); // moneyInput;
-
-                                //currentInput.value = moneyInput.value += ev.target.innerHTML;
-
-                            }
-                            else currentInput = checkElementInClass(); // currentInput = screenInput;*/
-
-                            currentInput.value += ev.target.innerHTML;
-
-
-                            if (currentInput.value.length > 1 && currentInput.value.length <= 4)
-                            {
-                                canMoveMoney = true;
-                                //console.log('Try to move money...');
-                            }
-
-                        }
-
-                        else if (ev.target.innerHTML === 'Del' && currentInput.value.length > 0)
-                        {
-                            //console.log('remove it?');
-                            currentInput.value = currentInput.value.slice(0, -1);
-                            if (currentInput.value.length <= 2)
-                                canMoveMoney = false;
-                        }
-
-                        else if (ev.target.innerHTML === 'OK' && canMoveMoney === true)
-                        {
-                            var operationSuccess = false;
-
-                            //console.log('???? ', currentInput.value, ' typo: ', typeof Number(currentInput.value));
-
-                            if (Number(currentInput.value) >= 50 && Number(currentInput.value) <= 4000)
-                            {
-                                //console.log('currentInput ', currentInput);
-
-                                if (currentInput.title === 'deposit-cash' || currentInput.title === 'money-slot')
-                                    operationSuccess = customer.depositCustomerMoney(currentInput.value);
-                                else if (currentInput.title === 'withdraw-cash')
-                                    operationSuccess = customer.withdrawCustomerMoney(currentInput.value);
-
-                                ////console.log('Current menu: ', currentInput);
-                                //console.log('Money moved!!');
-
-                                if (operationSuccess)
-                                {
-                                    currentInput.value = '';
-                                    if (currentInput.title === 'money-slot')
-                                        moneySlotShutters(currentInput);
-
-                                        //currentInput.parentNode.classList.toggle('hover-state');
-
-                                    //console.log('cleaned?');
-                                }
-
-                                //else console.log('not success?');
-                            }
-                            else if (Number(currentInput.value) < 50)
-                                alert('Minimalna kwota to 50 PLN!');
-                            else if (Number(currentInput.value) > 4000)
-                                alert('Maksymalna kwota to 4000 PLN!');
-
-                        }
-
-                        else if (ev.target.innerHTML === 'Anuluj')
-                        {
-                            console.log('Cancel?');
-                            location.hash === '#withdraw-menu' ? clearInput() : clearInput('money');
-                        }
-
-                    }
-
-                }
-
-                //console.log(moneyDigitStatus);
-
-            }, false);
-            d.getElementById('slots').addEventListener('click', function(ev)
-            {
-                slotsHandler(ev, intervalId, iC, s, cS, slotListening);
-                slotListening = false;
-                pinDigitStatus = 1;
-
-                if (ev.target.value)
-                {
-                    ev.target.value = '';
-                    moneySlotShutters(ev.target);
-                }
-
-            }, false);
-
-            d.getElementById('resetButton').addEventListener('click', function(ev)
-            {
-                if (JSON.stringify(customer.getCustomerProperties.call(defaultCustomer, true)) !== JSON.stringify(customer.getCustomerProperties(true))
-                        ||  localStorage.length > 1)
-                {
-                    console.log('Customer props: ', customer.getCustomerProperties(), ' localStorage: ', localStorage.getItem((customer.getCustomerNumber()).toString()));
-                    //alert('reset?');
-                    resetAllData();
-                }
-                else alert('Nie wykryto żadnych zmian. Nie ma potrzeby zastosowania resetu danych.');
-            }, false);
-
-
-            d.getElementById('manage-accounts').addEventListener('change', function(ev)
+            d.getElementById('manage-accounts').addEventListener('change', function (ev)
             {
                 ////console.log('RADIO change?', ev.target);
 
@@ -1032,7 +834,7 @@
 
             }, false);
 
-            d.getElementById('manage-accounts').addEventListener('click', function(ev)
+            d.getElementById('manage-accounts').addEventListener('click', function (ev)
             {
                 if (ev.target.tagName === 'BUTTON')
                 {
@@ -1046,9 +848,38 @@
 
                         if (ev.target.id === 'submit-account')
                         {
-                            console.log('You selected: ', selectedCustomer, '<<number ',idx);
+                            console.log('You selected: ', selectedCustomer, '<<number ', idx);
+
 
                             customer.loadAccount(idx);
+
+
+                            intervalId = setInterval(function ()
+                            {
+                                if (cS.style.color === 'green')
+                                {
+                                    cS.style.color = 'white';
+                                    cS.style.background = 'green';
+                                }
+
+                                else
+                                {
+                                    cS.style.color = 'green';
+                                    cS.style.background = 'white';
+                                }
+
+                            }, 1000);
+
+                            ev.target.parentNode.classList.add('fadeOut');
+
+                            setTimeout(function ()
+                            {
+                                ev.target.parentNode.classList.add('liftUp');
+                                d.getElementById('container').classList.remove('blur');
+
+                                startMachine();
+                            }, 1);
+
                             console.log('Current customer: ', customer.getCustomerProperties(true));
                         }
 
@@ -1119,6 +950,195 @@
                 }
             }, false);
 
+
+            function startMachine()
+            {
+                d.getElementById('interface').addEventListener('click', interfaceHandler, false);
+                d.getElementById('keyboard').addEventListener('click', function(ev)
+                {
+                    var correctPin = Number(customer.getCustomerPinCode()); // 1234;
+                    console.log('====CorrectPIN: ', correctPin);
+
+
+                    if (!moneyDigitStatus)
+                    {
+                        ////console.log('EV!: ', ev.target.innerHTML);
+                        var pinInput = d.getElementsByClassName('typeDigits')[pinDigitStatus - 1];
+                        //console.log('?pinCount: ', pinCount);
+                        if (ev.target.tagName.toUpperCase() !== 'DIV' && pinDigitStatus > 0 && Number(ev.target.innerHTML) >= 0 && pinInput.value.length < maximumPinLen)
+                        {
+                            pinInput.value += ev.target.innerHTML;
+                            //console.log('pinInput: ', pinInput.value, '|| pressed: ', ev.target.innerHTML);
+                            if (pinInput.value.length >= minimumPinLen)
+                            {
+                                canCheckPin = true;
+                            }
+                        }
+                        else if (ev.target.innerHTML === 'Del' && pinDigitStatus > 0)
+                        {
+                            //console.log('del');
+                            if (pinInput.value.length)
+                            {
+                                //console.log('delete...', pinInput.value[pinInput.value.length-1]);
+                                pinInput.value = pinInput.value.slice(0, -1);
+                                if (pinInput.value.length < minimumPinLen)
+                                {
+                                    canCheckPin = false;
+                                }
+                            }
+                        }
+
+                        else if (ev.target.innerHTML === 'Anuluj')
+                        {
+                            clearInput();
+                        }
+
+                        else if (/*canCheckPin === true &&*/ pinInput.value.length >= minimumPinLen)
+                        {
+                            if (ev.target.innerHTML === 'OK')
+                            {
+                                pinCount++;
+                                //console.log('If >= 4 i can check: ', pinInput.value.length);
+                                pinDigitStatus = checkPin(ev, pinInput, correctPin, pinCount, maxPinCount, failCount);
+                                ////console.log('[R]digitStatus?: ', digitStatus);
+
+                                //console.log('after return: ',moneyDigitStatus);
+                                if (pinDigitStatus === 1)
+                                    moneyDigitStatus = true;
+                            }
+                        }
+                    }
+
+                    else
+                    {
+
+                        /* to FIX => make sure of places when digits can be used  */
+
+                        if ((location.href.indexOf('status-menu') > -1) === false)
+                        {
+                            var //screenInput = '', // = checkElementInClass(), //'buttonLi', location.href.slice(location.href.indexOf('#')+1)); //'buttonLi', location.href.slice(location.href.indexOf('#')+1));
+                            //moneyInput = '', //document.getElementById('moneySlot').querySelector('input'),
+                                currentInput;
+
+                            location.hash.indexOf('deposit-menu') > -1 ? currentInput = document.getElementById('moneySlot').querySelector('input') : currentInput = checkElementInClass();
+
+                            if (ev.target.tagName.toUpperCase() !== 'DIV' && Number(ev.target.innerHTML) >= 0)
+                            {
+                                //console.log('Current menu is: ', location.href.slice(location.href.indexOf('#')));
+
+                                //currentInput = checkElementInClass('buttonLi', location.href.slice(location.href.indexOf('#')+1));
+
+                                //console.log('Double? ', currentInput.value, ' || ', ev.target.innerHTML);
+
+                                /*if (location.hash.indexOf('deposit-menu') > -1)
+                                 {
+
+
+                                 currentInput = document.getElementById('moneySlot').querySelector('input'); // moneyInput;
+
+                                 //currentInput.value = moneyInput.value += ev.target.innerHTML;
+
+                                 }
+                                 else currentInput = checkElementInClass(); // currentInput = screenInput;*/
+
+                                currentInput.value += ev.target.innerHTML;
+
+
+                                if (currentInput.value.length > 1 && currentInput.value.length <= 4)
+                                {
+                                    canMoveMoney = true;
+                                    //console.log('Try to move money...');
+                                }
+
+                            }
+
+                            else if (ev.target.innerHTML === 'Del' && currentInput.value.length > 0)
+                            {
+                                //console.log('remove it?');
+                                currentInput.value = currentInput.value.slice(0, -1);
+                                if (currentInput.value.length <= 2)
+                                    canMoveMoney = false;
+                            }
+
+                            else if (ev.target.innerHTML === 'OK' && canMoveMoney === true)
+                            {
+                                var operationSuccess = false;
+
+                                //console.log('???? ', currentInput.value, ' typo: ', typeof Number(currentInput.value));
+
+                                if (Number(currentInput.value) >= 50 && Number(currentInput.value) <= 4000)
+                                {
+                                    //console.log('currentInput ', currentInput);
+
+                                    if (currentInput.title === 'deposit-cash' || currentInput.title === 'money-slot')
+                                        operationSuccess = customer.depositCustomerMoney(currentInput.value);
+                                    else if (currentInput.title === 'withdraw-cash')
+                                        operationSuccess = customer.withdrawCustomerMoney(currentInput.value);
+
+                                    ////console.log('Current menu: ', currentInput);
+                                    //console.log('Money moved!!');
+
+                                    if (operationSuccess)
+                                    {
+                                        currentInput.value = '';
+                                        if (currentInput.title === 'money-slot')
+                                            moneySlotShutters(currentInput);
+
+                                        //currentInput.parentNode.classList.toggle('hover-state');
+
+                                        //console.log('cleaned?');
+                                    }
+
+                                    //else console.log('not success?');
+                                }
+                                else if (Number(currentInput.value) < 50)
+                                    alert('Minimalna kwota to 50 PLN!');
+                                else if (Number(currentInput.value) > 4000)
+                                    alert('Maksymalna kwota to 4000 PLN!');
+
+                            }
+
+                            else if (ev.target.innerHTML === 'Anuluj')
+                            {
+                                console.log('Cancel?');
+                                location.hash === '#withdraw-menu' ? clearInput() : clearInput('money');
+                            }
+
+                        }
+
+                    }
+
+                    //console.log(moneyDigitStatus);
+
+                }, false);
+                d.getElementById('slots').addEventListener('click', function(ev)
+                {
+                    slotsHandler(ev, intervalId, iC, s, cS, slotListening);
+                    slotListening = false;
+                    pinDigitStatus = 1;
+
+                    if (ev.target.value)
+                    {
+                        ev.target.value = '';
+                        moneySlotShutters(ev.target);
+                    }
+
+                }, false);
+
+                d.getElementById('resetButton').addEventListener('click', function(ev)
+                {
+                    if (JSON.stringify(customer.getCustomerProperties.call(defaultCustomer, true)) !== JSON.stringify(customer.getCustomerProperties(true))
+                        ||  localStorage.length > 1)
+                    {
+                        console.log('Customer props: ', customer.getCustomerProperties(), ' localStorage: ', localStorage.getItem((customer.getCustomerNumber()).toString()));
+                        //alert('reset?');
+                        resetAllData();
+                    }
+                    else alert('Nie wykryto żadnych zmian. Nie ma potrzeby zastosowania resetu danych.');
+                }, false);
+            }
+
+
             function clearInput(param)
             {
                 var input = checkElementInClass(param);
@@ -1126,7 +1146,7 @@
             }
 
         }
-        eventsHandling(document);
+        eventsHandling(doc);
 
     }
     start();
@@ -1148,4 +1168,4 @@
     }
 
 
-//}());
+}(document));

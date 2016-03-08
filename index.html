@@ -9,7 +9,7 @@
 
 <body>
     <div id="machine">
-        <div id="container"> <!-- Main Container -->
+        <div id="container" class="blur"> <!-- Main Container -->
             <div id="interface"> <!-- interface -->
 
                 <div id="buttonL"> <!-- left buttons -->
@@ -116,31 +116,6 @@
                     <div><button type="button" id="keyCancel">Anuluj</button></div>
                 </div> <!-- END of keyboard -->
 
-                <form id="manage-accounts">
-
-                    <label class="options"><input type="radio" name="choose-option" value="chooseAccount" checked>Wybierz konto</label>
-                    <label class="options"><input type="radio" name="choose-option" value="createAccount">Stwórz konto</label>
-                    <!-- <label><input type="radio" name="choose-option" value="usunKonto">Usuń konto</label> -->
-
-                    <hr>
-
-                    <select id="list-of-accounts" title="listOfAccounts">
-                        <option>Gość</option>
-                    </select>
-
-                    <div id="create-account" class="hide">
-                        <label for="user-name" class="user-data">Wprowadź imię: </label>
-                        <input type="text" class="enter-customer-data" id="user-name" placeholder="np. Józef">
-
-                        <label for="user-pin" class="user-data">Wprowadź kod PIN: </label>
-                        <input type="text" class="enter-customer-data" id="user-pin" placeholder="np. 2016">
-                    </div>
-
-                    <button type="button" id="submit-account" class="only">Zatwierdź</button>
-                    <button type="button" id="delete-account">Usuń</button>
-
-                </form>
-
                 <button type="button" id="resetButton"><p>reset</p></button>
 
                 <div id="slots"> <!-- card slot -->
@@ -155,8 +130,32 @@
 
                 <div style="clear: both;"></div>
             </div>
-
         </div> <!-- END OF Main Container -->
+
+        <form id="manage-accounts">
+
+            <label class="options"><input type="radio" name="choose-option" value="chooseAccount" checked>Wybierz konto</label>
+            <label class="options"><input type="radio" name="choose-option" value="createAccount">Stwórz konto</label>
+            <!-- <label><input type="radio" name="choose-option" value="usunKonto">Usuń konto</label> -->
+
+            <hr>
+
+            <select id="list-of-accounts" title="listOfAccounts">
+                <option>Gość</option>
+            </select>
+
+            <div id="create-account" class="hide">
+                <label for="user-name" class="user-data">Wprowadź imię: </label>
+                <input type="text" class="enter-customer-data" id="user-name" placeholder="np. Józef">
+
+                <label for="user-pin" class="user-data">Wprowadź kod PIN: </label>
+                <input type="text" class="enter-customer-data" id="user-pin" placeholder="np. 2016">
+            </div>
+
+            <button type="button" id="submit-account" class="only">Zatwierdź</button>
+            <button type="button" id="delete-account">Usuń</button>
+
+        </form>
     </div>
 
 <script type="text/javascript" src="code.js"></script>

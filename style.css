@@ -1,8 +1,10 @@
 body
 {
+
     background-color: #AE6717;
     margin: 0 auto;
     font-weight: bold;
+    overflow: hidden;
 
 }
 
@@ -15,7 +17,12 @@ body
     margin: 85px auto;
     background: #00637A;
 
+    z-index: 20;
+}
 
+.blur
+{
+    opacity: 0.2;
 }
 
 #container
@@ -261,17 +268,36 @@ body
 #manage-accounts
 {
     width: 130px;
-    position: absolute;
-    top: 0;
-    display: inline-block;
+
+    /*position: absolute;
+    top: 0;*/
+
+    position: relative;
+    top: -235px;
+    /*left: 120px;*/
+
+    display: block;
     background: orange;
-    margin-left: 70px;
+    margin: 0 auto;
     /*margin-top: 25px;*/
 
     padding: 2px 6px 2px 2px;
 
     border: 2px solid black;
     border-radius: 5px;
+
+}
+
+.fadeOut
+{
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.75s, opacity 0.15s linear;
+}
+
+.liftUp
+{
+    top: -538px !important;
 }
 
 #manage-accounts hr
