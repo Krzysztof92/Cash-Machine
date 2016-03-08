@@ -905,14 +905,18 @@
                     if (ev.target.value === 'createAccount')
                     {
                         ev.target.parentNode.parentNode.querySelector('#create-account').classList.remove('hide');
+                        ev.target.parentNode.parentNode.querySelector('#submit-account').classList.remove('only');
                         ev.target.parentNode.parentNode.querySelector('#list-of-accounts').classList.add('hide');
+                        ev.target.parentNode.parentNode.querySelector('#delete-account').classList.add('hide');
                     }
 
                     else
                     {
                         //console.log('2nd radio: ', ev.target.parentNode.parentNode.querySelector('#list-of-accounts'));
                         ev.target.parentNode.parentNode.querySelector('#create-account').classList.add('hide');
+                        ev.target.parentNode.parentNode.querySelector('#submit-account').classList.add('only');
                         ev.target.parentNode.parentNode.querySelector('#list-of-accounts').classList.remove('hide');
+                        ev.target.parentNode.parentNode.querySelector('#delete-account').classList.remove('hide');
                     }
                 }
 

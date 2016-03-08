@@ -312,12 +312,50 @@ body
 {
     position: relative;
     left: 20px;
-    background: orange;
-    color: black;
+    background: white;
+    color: green;
     font-size: 15px;
     font-weight: bold;
     border: 2px solid black;
     border-radius: 25%;
+}
+
+#submit-account.only
+{
+    display: inline-block;
+    width: 75px;
+    font-size: 13px;
+    left: 3px;
+    color: green;
+}
+
+#submit-account:hover
+{
+    color: white;
+    background: green;
+    cursor: pointer;
+}
+
+#delete-account
+{
+    position: relative;
+    left: 5px;
+    display: inline-block;
+    width: 47px;
+
+    background: black;
+    color: red;
+    font-size: 13px;
+    font-weight: bold;
+    border: 2px solid black;
+    border-radius: 25%;
+}
+
+#delete-account:hover
+{
+    background: red;
+    color: black;
+    cursor: pointer;
 }
 
 #slots
