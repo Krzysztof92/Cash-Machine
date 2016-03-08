@@ -898,7 +898,7 @@
 
             d.getElementById('manage-accounts').addEventListener('change', function(ev)
             {
-                ////console.log('RADIO ', ev.target);
+                ////console.log('RADIO change?', ev.target);
 
                 if (ev.target.type === 'radio')
                 {
@@ -920,6 +920,58 @@
                     }
                 }
 
+            }, false);
+
+            d.getElementById('manage-accounts').addEventListener('click', function(ev)
+            {
+                if (ev.target.tagName === 'BUTTON')
+                {
+                    ////console.log('BUTTON click?: ', ev.target);
+                    if (ev.target.id === 'submit-account')
+                    {
+                        if (!ev.target.classList.contains('only'))
+                        {
+                            var pin = ev.target.parentNode.parentNode.querySelector('#user-pin').value,
+                                name = ev.target.parentNode.parentNode.querySelector('#user-name').value;
+
+                            //console.log('Imie?: ', ev.target.parentNode.parentNode.querySelector('#user-name').value);
+
+                            if (name.length > 0 && pin.length > 0)
+                            {
+                                if (/^[A-ZĄĆĘŁŃÓŻŹ][a-ząęśćńółżź]+$/.test(name) && Number(pin))
+                                {
+                                    if (pin.length < 4)
+                                    {
+                                        console.log('PIN is too SHORT! Minimum 4 digits');
+                                    }
+
+                                    else if (pin.length > 8)
+                                    {
+                                        console.log('PIN is too LONG! Maximum 8 digits');
+                                    }
+
+                                    else console.log('Imie: ', name, '\nPIN: ', pin);
+                                }
+
+                                else if (/^[A-ZĄĆĘŁŃÓŻŹ][a-ząęśćńółżź]+$/.test(name) && !Number(pin))
+                                    console.log('PIN is NOT a number!');
+
+                                else if (!/^[A-ZĄĆĘŁŃÓŻŹ][a-ząęśćńółżź]+$/.test(name) && Number(pin))
+                                    console.log('NAME must contain only letters! Starting with capital letter - minimum 2 chars');
+
+                                else console.log('NAME must contain only LETTERS and PIN has to be NUMBER');
+                            }
+
+                            else if (name.length === 0 && pin.length > 0)
+                                console.log('NAME must not be EMPTY!');
+
+                            else if (name.length > 0 && pin.length === 0)
+                                console.log('PIN must not be EMPTY!');
+
+                            else console.log('NAME and PIN must not be EMPTY!');
+                        }
+                    }
+                }
             }, false);
 
             function clearInput(param)
