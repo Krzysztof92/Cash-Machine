@@ -655,7 +655,7 @@
 
                 localStorage.setItem((localStorage.length).toString(), JSON.stringify({
                     name: name,
-                    pin: pin,
+                    pin: Number(pin),
                     money: 0
                 }));
 
@@ -731,13 +731,13 @@
 
     (function()
     {
-        customer.loadAccount();
+        ////customer.loadAccount();
         customer.makeListOfAccounts();
     }());
 
 
     console.log('Default customer: ', customer.getCustomerProperties.call(defaultCustomer, true));
-    console.log('Current customer: ', customer.getCustomerProperties(true)); // customer.getCustomerName(), ' ', customer.getCustomerPinCode(), ' ', customer.getCustomerAccountStatus());
+    /*console.log('Current customer: ', customer.getCustomerProperties(true));*/ // customer.getCustomerName(), ' ', customer.getCustomerPinCode(), ' ', customer.getCustomerAccountStatus());
 
     function checkElementInClass(another) //elemClass, elemId) //elemClass, elemId)
     {
@@ -802,7 +802,6 @@
 
         }, 1000);
 
-        var correctPin = Number(customer.getCustomerPinCode()); // 1234;
 
         function eventsHandling(d)
         {
@@ -821,6 +820,9 @@
             d.getElementById('interface').addEventListener('click', interfaceHandler, false);
             d.getElementById('keyboard').addEventListener('click', function(ev)
             {
+                var correctPin = Number(customer.getCustomerPinCode()); // 1234;
+                console.log('====CorrectPIN: ', correctPin);
+
 
                 if (!moneyDigitStatus)
                 {
@@ -1044,9 +1046,10 @@
 
                         if (ev.target.id === 'submit-account')
                         {
-                            console.log('You selected: ', selectedCustomer, '- ',idx);
+                            console.log('You selected: ', selectedCustomer, '<<number ',idx);
 
-                            //customer.loadAccount();
+                            customer.loadAccount(idx);
+                            console.log('Current customer: ', customer.getCustomerProperties(true));
                         }
 
                         else if (ev.target.id === 'delete-account')
