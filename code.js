@@ -391,7 +391,7 @@
         pin : '', //1234,
         money : '', //12000,
 
-        loadAccount : function()
+        loadAccount : function(num)
         {
             ////console.log('localStorage STATUS: ', localStorage, ' len ', localStorage.length);
             if (!localStorage.getItem('0') || localStorage.length === 0)
@@ -429,9 +429,9 @@
 
             else if (localStorage.length > 1)
             {
-                this.setCustomerProperties();
+                this.setCustomerProperties(num);
 
-                var availableAccounts = this.showAccountList('no');
+                ////var availableAccounts = this.showAccountList('no');
 
                 //alert(availableAccounts);
             }
@@ -636,7 +636,7 @@
 
                             if (name === storageObj[prop])
                             {
-                                console.log(name, ' <> ', storageObj[prop]);
+                                console.log('That customer already exists!');
                                 customerExists = true;
 
                                 return false;
@@ -659,6 +659,8 @@
                     money: 0
                 }));
 
+                this.makeListOfAccounts(true);
+
                 console.log('Added customer: ', localStorage.getItem((localStorage.length - 1).toString()));
 
                 return true;
@@ -667,17 +669,52 @@
 
         },
 
-        deleteCustomer : function (name, index)
+        deleteCustomer : function (name, index, parent)
         {
 
             if (index > 0)
             {
+
+                parent.removeChild(parent[index]);
+
                 localStorage.removeItem(index);
-                console.log('Removed... now there are: ', localStorage);
+                //console.log('Removed... now there are: ', localStorage);
             }
 
             else console.log('You cannot delete Guest account!');
+        },
 
+        makeListOfAccounts : function(lastOne)
+        {
+            var list = document.getElementById('list-of-accounts');
+
+            //console.log('LIST of customers: ', list.options);
+
+            for (var customer in localStorage)
+            {
+                if (localStorage.hasOwnProperty(customer))
+                {
+                    var customerName = JSON.parse(localStorage[customer]).name,
+                        newCustomer = '',
+                        textNode = '';
+
+                    if (customer == 0)
+                        continue;
+
+                    else if (lastOne && customer < localStorage.length - 1)
+                    {
+                        continue;
+                    }
+
+
+                    console.log('Looping...: ', customer, ': ', customerName);
+
+                    newCustomer = document.createElement('option');
+                    textNode = document.createTextNode(customerName);
+                    newCustomer.appendChild(textNode);
+                    list.appendChild(newCustomer);
+                }
+            }
 
         }
 
@@ -695,6 +732,7 @@
     (function()
     {
         customer.loadAccount();
+        customer.makeListOfAccounts();
     }());
 
 
@@ -1006,15 +1044,16 @@
 
                         if (ev.target.id === 'submit-account')
                         {
-                            console.log('You selected: ', selectedCustomer);
+                            console.log('You selected: ', selectedCustomer, '- ',idx);
 
+                            //customer.loadAccount();
                         }
 
                         else if (ev.target.id === 'delete-account')
                         {
                             //console.log('Delete selected account? ', selectedCustomer);
 
-                            customer.deleteCustomer(selectedCustomer, idx);
+                            customer.deleteCustomer(selectedCustomer, idx, listOfCustomers);
                         }
 
                     }
