@@ -665,6 +665,20 @@
 
             }
 
+        },
+
+        deleteCustomer : function (name, index)
+        {
+
+            if (index > 0)
+            {
+                localStorage.removeItem(index);
+                console.log('Removed... now there are: ', localStorage);
+            }
+
+            else console.log('You cannot delete Guest account!');
+
+
         }
 
     };
@@ -763,7 +777,8 @@
                 maxPinCount = 3,
                 failCount = document.getElementById('wrongPin').childNodes[5],
                 moneyDigitStatus = false,
-                canMoveMoney = false;
+                canMoveMoney = false,
+                accountManageMode = true;
 
             d.getElementById('interface').addEventListener('click', interfaceHandler, false);
             d.getElementById('keyboard').addEventListener('click', function(ev)
@@ -959,6 +974,8 @@
                         ev.target.parentNode.parentNode.querySelector('#submit-account').classList.remove('only');
                         ev.target.parentNode.parentNode.querySelector('#list-of-accounts').classList.add('hide');
                         ev.target.parentNode.parentNode.querySelector('#delete-account').classList.add('hide');
+
+                        accountManageMode = false;
                     }
 
                     else
@@ -968,6 +985,8 @@
                         ev.target.parentNode.parentNode.querySelector('#submit-account').classList.add('only');
                         ev.target.parentNode.parentNode.querySelector('#list-of-accounts').classList.remove('hide');
                         ev.target.parentNode.parentNode.querySelector('#delete-account').classList.remove('hide');
+
+                        accountManageMode = true;
                     }
                 }
 
@@ -978,55 +997,81 @@
                 if (ev.target.tagName === 'BUTTON')
                 {
                     ////console.log('BUTTON click?: ', ev.target);
-                    if (ev.target.id === 'submit-account')
+
+                    if (accountManageMode)
                     {
-                        if (!ev.target.classList.contains('only'))
+                        var listOfCustomers = ev.target.parentNode.parentNode.querySelector('#list-of-accounts'),
+                            idx = listOfCustomers.selectedIndex,
+                            selectedCustomer = listOfCustomers[idx].value;
+
+                        if (ev.target.id === 'submit-account')
                         {
-                            var pin = ev.target.parentNode.parentNode.querySelector('#user-pin').value,
-                                name = ev.target.parentNode.parentNode.querySelector('#user-name').value;
+                            console.log('You selected: ', selectedCustomer);
 
-                            //console.log('Imie?: ', ev.target.parentNode.parentNode.querySelector('#user-name').value);
+                        }
 
-                            if (name.length > 0 && pin.length > 0)
+                        else if (ev.target.id === 'delete-account')
+                        {
+                            //console.log('Delete selected account? ', selectedCustomer);
+
+                            customer.deleteCustomer(selectedCustomer, idx);
+                        }
+
+                    }
+
+                    else if (!accountManageMode)
+                    {
+                        if (ev.target.id === 'submit-account')
+                        {
+                            if (!ev.target.classList.contains('only'))
                             {
-                                if (/^[A-ZĄĆĘŁŃÓŻŹ][a-ząęśćńółżź]+$/.test(name) && Number(pin))
+                                var pin = ev.target.parentNode.parentNode.querySelector('#user-pin').value,
+                                    name = ev.target.parentNode.parentNode.querySelector('#user-name').value;
+
+                                //console.log('Imie?: ', ev.target.parentNode.parentNode.querySelector('#user-name').value);
+
+                                if (name.length > 0 && pin.length > 0)
                                 {
-                                    if (pin.length < 4)
+                                    if (/^[A-ZĄĆĘŁŃÓŻŹ][a-ząęśćńółżź]+$/.test(name) && Number(pin))
                                     {
-                                        console.log('PIN is too SHORT! Minimum 4 digits');
+                                        if (pin.length < 4)
+                                        {
+                                            console.log('PIN is too SHORT! Minimum 4 digits');
+                                        }
+
+                                        else if (pin.length > 8)
+                                        {
+                                            console.log('PIN is too LONG! Maximum 8 digits');
+                                        }
+
+                                        else
+                                        {
+                                            //console.log('Imie: ', name, '\nPIN: ', pin);
+
+                                            var createdCustomer = customer.addCustomer(name, pin);
+
+                                            console.log('Is new customer?: ', createdCustomer);
+                                        }
                                     }
 
-                                    else if (pin.length > 8)
-                                    {
-                                        console.log('PIN is too LONG! Maximum 8 digits');
-                                    }
+                                    else if (/^[A-ZĄĆĘŁŃÓŻŹ][a-ząęśćńółżź]+$/.test(name) && !Number(pin))
+                                        console.log('PIN is NOT a number!');
 
-                                    else
-                                    {
-                                        //console.log('Imie: ', name, '\nPIN: ', pin);
+                                    else if (!/^[A-ZĄĆĘŁŃÓŻŹ][a-ząęśćńółżź]+$/.test(name) && Number(pin))
+                                        console.log('NAME must contain only letters! Starting with capital letter - minimum 2 chars');
 
-                                        var createdCustomer = customer.addCustomer(name, pin);
-
-                                        console.log('Is new customer?: ', createdCustomer);
-                                    }
+                                    else console.log('NAME must contain only LETTERS and PIN has to be NUMBER');
                                 }
 
-                                else if (/^[A-ZĄĆĘŁŃÓŻŹ][a-ząęśćńółżź]+$/.test(name) && !Number(pin))
-                                    console.log('PIN is NOT a number!');
+                                else if (name.length === 0 && pin.length > 0)
+                                    console.log('NAME must not be EMPTY!');
 
-                                else if (!/^[A-ZĄĆĘŁŃÓŻŹ][a-ząęśćńółżź]+$/.test(name) && Number(pin))
-                                    console.log('NAME must contain only letters! Starting with capital letter - minimum 2 chars');
+                                else if (name.length > 0 && pin.length === 0)
+                                    console.log('PIN must not be EMPTY!');
 
-                                else console.log('NAME must contain only LETTERS and PIN has to be NUMBER');
+                                else console.log('NAME and PIN must not be EMPTY!');
                             }
 
-                            else if (name.length === 0 && pin.length > 0)
-                                console.log('NAME must not be EMPTY!');
-
-                            else if (name.length > 0 && pin.length === 0)
-                                console.log('PIN must not be EMPTY!');
-
-                            else console.log('NAME and PIN must not be EMPTY!');
                         }
                     }
                 }
